@@ -1,0 +1,30 @@
+{
+    "name": "Mparaiso/simpleuserserviceprovider",
+    "type": "Silex service provider",
+    "description": "Simple User management for Silex , work in progress",
+    "keywords": ["User management"],
+    "homepage": "https://github.com/Mparaiso/simpleuserserviceprovider",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "MParaiso",
+            "email": "mparaiso@online.fr"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "friendsofsymfony/user-bundle": "1.*",
+        "mparaiso/silex-extensions": "*@dev",
+        "silex/silex": "*@dev",
+        "symfony/symfony": "2.2.*",
+        "swiftmailer/swiftmailer": "*",
+        "twig/twig":"*",
+        "mparaiso/consoleserviceprovider":"*@dev",
+        "mparaiso/doctrineormserviceprovider":"*@dev"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "src"
+        }
+    }
+}

@@ -1,0 +1,8 @@
+{% extends app['mp.user.template.layout'] %}
+{% block mp_user_content %}
+<h4>Register</h4>
+<form action="" method="POST" name={{form.vars.name}}>
+{{ form_widget(form)}}
+        <input type="submit" value="Register" />
+    </form>
+{% endblock %}

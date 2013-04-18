@@ -1,0 +1,41 @@
+# Mparaiso\User\Entity\Group.dcm.yml
+Mparaiso\User\Entity\Role:
+  type: entity
+  table: mp_user_roles
+  repositoryClass: Mparaiso\User\Repository\RoleRepository
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    name:
+      type: string
+      length: 50
+    role:
+      type: string
+      length: 50
+#    address:
+#      targetEntity: Address
+#      joinColumn:
+#        name: address_id
+#        referencedColumnName: id
+#  oneToMany:
+#    phonenumbers:
+#      targetEntity: Phonenumber
+#      mappedBy: user
+#      cascade: ["persist", "merge"]
+#  manyToMany:
+#    groups:
+#      targetEntity: Group
+#      joinTable:
+#        name: cms_users_groups
+#        joinColumns:
+#          user_id:
+#            referencedColumnName: id
+#        inverseJoinColumns:
+#          group_id:
+#            referencedColumnName: id
+#  lifecycleCallbacks:
+#    prePersist: [ doStuffOnPrePersist, doOtherStuffOnPrePersistToo ]
+#    postPersist: [ doStuffOnPostPersist ]

@@ -1,0 +1,15 @@
+{% extends app['mp.user.template.layout'] %}
+{% block mp_user_content %}
+<h4>Please login</h4>
+<form action="{{ path('mp.user.route.login.check')}}" method='POST'>
+    {{ error }}
+        <label for="login">login
+        </label>
+        <input type="text" name='_username' />
+
+        <label for="password">password
+        </label>
+        <input type="password" name='_password'/>
+        <input type="submit" value="Login" />
+    </form>
+{% endblock %}

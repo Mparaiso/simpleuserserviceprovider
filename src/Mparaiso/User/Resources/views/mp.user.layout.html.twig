@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        {% block mp_user_menu %}
+            {% include app['mp.user.template.status'] %}
+            {% endblock %}
+{% block mp_user_flash %}
+            {% include app['mp.user.template.flash'] %}
+{% endblock %}
+{% block mp_user_content %}
+{% endblock %}
+        </body>
+    </html>

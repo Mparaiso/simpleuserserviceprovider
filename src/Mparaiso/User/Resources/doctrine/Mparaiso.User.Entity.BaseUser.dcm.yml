@@ -1,0 +1,32 @@
+Mparaiso\User\Entity\BaseUser:
+  type: mappedSuperclass
+  table: User
+  indexes:
+    name_index:
+      columns: [ username,email ]
+  fields:
+    username:
+      type: string
+      length: 100
+      unique: true
+    password:
+      type: string
+      length: 100
+    email:
+      type: string
+      length: 100
+      unique: true
+    salt:
+      type: string
+      length: 256
+    accountNonExpired:
+      type: boolean
+    accountNonLocked:
+      type: boolean
+    credentialsNonExpired:
+      type: boolean
+    enabled:
+      type: boolean
+  manyToMany:
+    roles:
+      targetEntity: Mparaiso\User\Entity\Role
