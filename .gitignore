@@ -3,3 +3,4 @@ composer.lock
 vendor/*
 app/*
 console.php
+nbproject
