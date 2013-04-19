@@ -1,7 +1,15 @@
+<span class='navbar-text '>
+
 {% if app.security.isGranted('IS_AUTHENTICATED_FULLY') %}
-Welcome back 
-<a href="{{path('mp.user.route.profile.index')}}">{{ app.security.token.user.username }} </a> | 
-<a href="{{ path('mp.user.route.logout')}}">logout</a>
+
+    Welcome back 
+    <a class='' href="{{path('mp.user.route.profile.index')}}">{{ app.security.token.user.username }} </a> | 
+    <a href="{{ path('mp.user.route.logout')}}">logout</a>
 {% else %}
-<a href="{{path('mp.user.route.login')}}">login</a>
+    <a href="{{path('mp.user.route.login')}}">login</a> |
+    <a href="{{path('mp.user.route.register')}}">Register</a>
+
+
+
 {% endif %}
+</span>

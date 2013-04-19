@@ -1,5 +1,5 @@
 {
-    "name": "Mparaiso/simpleuserserviceprovider",
+    "name": "mparaiso/simpleuserserviceprovider",
     "type": "Silex service provider",
     "description": "Simple User management for Silex , work in progress",
     "keywords": ["User management"],
@@ -20,7 +20,8 @@
         "swiftmailer/swiftmailer": "*",
         "twig/twig":"*",
         "mparaiso/consoleserviceprovider":"*@dev",
-        "mparaiso/doctrineormserviceprovider":"*@dev"
+        "mparaiso/doctrineormserviceprovider":"*@dev",
+        "monolog/monolog":"*"
     },
     "autoload": {
         "psr-0": {

@@ -4,3 +4,4 @@ vendor/*
 app/*
 console.php
 nbproject
+web/*

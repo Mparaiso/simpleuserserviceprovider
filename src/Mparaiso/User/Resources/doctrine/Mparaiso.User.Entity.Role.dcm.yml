@@ -12,30 +12,8 @@ Mparaiso\User\Entity\Role:
     name:
       type: string
       length: 50
+      unique: true
     role:
       type: string
       length: 50
-#    address:
-#      targetEntity: Address
-#      joinColumn:
-#        name: address_id
-#        referencedColumnName: id
-#  oneToMany:
-#    phonenumbers:
-#      targetEntity: Phonenumber
-#      mappedBy: user
-#      cascade: ["persist", "merge"]
-#  manyToMany:
-#    groups:
-#      targetEntity: Group
-#      joinTable:
-#        name: cms_users_groups
-#        joinColumns:
-#          user_id:
-#            referencedColumnName: id
-#        inverseJoinColumns:
-#          group_id:
-#            referencedColumnName: id
-#  lifecycleCallbacks:
-#    prePersist: [ doStuffOnPrePersist, doOtherStuffOnPrePersistToo ]
-#    postPersist: [ doStuffOnPostPersist ]
+      unique: true

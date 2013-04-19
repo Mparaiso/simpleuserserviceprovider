@@ -3,8 +3,17 @@ Mparaiso\User\Entity\User:
   type: entity
   table: mp_user_users
   repositoryClass: Mparaiso\User\Repository\UserRepository
-  id:
+  fields:
     id:
+      id: true
       type: integer
       generator:
-        strategy: AUTO
+        strategy: AUTO    
+  oneToMany:
+    dinners:
+      targetEntity: Entity\Dinner
+      mappedBy: user
+      
+  manyToMany:
+    roles:
+      targetEntity: Mparaiso\User\Entity\Role

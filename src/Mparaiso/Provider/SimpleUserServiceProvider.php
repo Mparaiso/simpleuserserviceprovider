@@ -6,6 +6,7 @@ use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\DriverChain;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
+use Mparaiso\User\Command\CreateRoleCommand;
 use Mparaiso\User\Controller\ProfileController;
 use Mparaiso\User\Controller\RegistrationController;
 use Mparaiso\User\Controller\SecurityController;
@@ -19,7 +20,9 @@ class SimpleUserServiceProvider implements ServiceProviderInterface, ControllerP
         $app['mp.user.controllers'] = $this;
         /* UserRepository */
         $app['mp.user.user_service'] = $app->share(function($app) {
-                    return $app['mp.user.em']->getRepository($app['mp.user.user.class']);
+                    return new $app['mp.user.user_service.class'](
+                            $app['mp.user.em'], $app['mp.user.user.class'], $app['mp.user.role.class']
+                    );
                 });
         /* RoleRepository */
         $app['mp.user.role_service'] = $app->share(function($app) {
@@ -48,6 +51,14 @@ class SimpleUserServiceProvider implements ServiceProviderInterface, ControllerP
                     );
                     return $service;
                 });
+
+        /** install commands for the console tool */
+        $app['mp.user.console'] = function($app) {
+                    return $app['console'];
+                };
+        $app['mp.user.boot_commands'] = $app->protect(function()use($app) {
+                    $app['mp.user.console']->add(new CreateRoleCommand);
+                });
         $app['mp.user.user_provider.class'] = "Symfony\Bridge\Doctrine\Security\User\EntityUserProvider";
         $app['mp.user.user_provider.property'] = 'username';
         $app['mp.user.user_provider.manager_name'] = null;
@@ -55,7 +66,7 @@ class SimpleUserServiceProvider implements ServiceProviderInterface, ControllerP
         $app['mp.user.user.class'] = 'Mparaiso\User\Entity\User';
         $app['mp.user.role.class'] = "Mparaiso\User\Entity\Role";
         $app['mp.user.role_service.class'] = "Mparaiso\User\Repository\RoleRepository";
-        $app['mp.user.user_service.class'] = "Mparaiso\User\Repository\Repository";
+        $app['mp.user.user_service.class'] = "Mparaiso\User\Service\UserService";
         $app['mp.user.registration.type'] = "Mparaiso\User\Form\RegistrationType";
         $app['mp.user.registration.model'] = $app['mp.user.user.class'];
 
@@ -92,7 +103,7 @@ class SimpleUserServiceProvider implements ServiceProviderInterface, ControllerP
         $app['orm.chain_driver'] = $app->share(
                 $app->extend("orm.chain_driver", function(MappingDriverChain $chain, $app) {
                             $dir = __DIR__ . "/../User/Resources/doctrine/";
-                            $chain->addDriver(new YamlDriver($dir), "Mparaiso");
+                            $chain->addDriver(new YamlDriver($dir), "Mparaiso\User\Entity");
                             return $chain;
                         }
                 )

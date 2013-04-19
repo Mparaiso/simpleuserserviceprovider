@@ -1,10 +1,13 @@
 Mparaiso\User\Entity\BaseUser:
   type: mappedSuperclass
-  table: User
-  indexes:
-    name_index:
-      columns: [ username,email ]
+  table: mp_user_users
+
   fields:
+#    id:
+#      id: true
+#      type: integer
+#      generator:
+#        strategy: AUTO
     username:
       type: string
       length: 100
@@ -27,6 +30,6 @@ Mparaiso\User\Entity\BaseUser:
       type: boolean
     enabled:
       type: boolean
-  manyToMany:
-    roles:
-      targetEntity: Mparaiso\User\Entity\Role
+#  manyToMany:
+#    roles:
+#      targetEntity: Mparaiso\User\Entity\Role
