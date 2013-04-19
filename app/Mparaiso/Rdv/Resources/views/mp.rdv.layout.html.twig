@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Nerd dinner</title>
+        <link rel="stylesheet" href="{{app.request.basePath}}/vendor/bootstrap/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            
+        <div class="container">
+            <a href="{{app.request.baseUrl}}/" class="brand">Nerd Dinner</a>
+            <ul class="nav pull-right">
+            <li><a href="{{ path('rdv_dinner_index')}}">Find Dinner</a></li>
+            <li><a href="{{ path('rdv_dinner_create')}}">Host Dinner</a></li>
+            <li><a href="/">About</a></li>
+            </ul>
+        </div>
+        </div>
+        </div>
+        <div class="container">
+            {% include 'flash.html.twig' %}
+           {% block content %}
+           {% endblock %}
+            </div>
+            <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400' rel='stylesheet' type='text/css'>
+
+            <style type="text/css">
+                    body{
+                        font-size: 100%;
+                        font-family: 'Open Sans','Carme',sans-serif;
+                    }
+                </style>
+            </body>
+        </html>

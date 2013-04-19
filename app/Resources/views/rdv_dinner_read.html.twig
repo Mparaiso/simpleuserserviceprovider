@@ -1,0 +1,18 @@
+{% extends app['mp.rdv.templates.layout'] %}
+{% block content %}
+<div>
+{% if dinner is not null %}
+<h4>{{ dinner.title }} </h4>
+<p><b>When</b>: {{ dinner.eventDate|date}}</p>
+<p><b>Description</b>:{{ dinner.description }}</p>
+<p><b>Where</b>: {{dinner.address}}</p>
+<p><b>Organizer</b>: {{ dinner.hostedBy}}</p>
+{% if app.security.token.user == dinner.host %}
+<a href="{{path('rdv_dinner_update',{id:dinner.id}) }}">Edit</a> | 
+{% endif %}
+<a href="{{path('rdv_dinner_index')}}">Back to index</a>
+{% else %}
+        no dinner found
+{% endif %}
+    </div>
+{% endblock %}

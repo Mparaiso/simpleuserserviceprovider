@@ -1,0 +1,156 @@
+<?php
+
+use Entity\Rsvp;
+use Mparaiso\Provider\ConsoleServiceProvider;
+use Mparaiso\Provider\DoctrineORMServiceProvider;
+use Mparaiso\Provider\RdvServiceProvider;
+use Mparaiso\Provider\RouteConfigServiceProvider;
+use Mparaiso\Provider\SimpleUserServiceProvider;
+use Mparaiso\Rdv\Event\DinnerEvents;
+use Silex\Application;
+use Silex\Provider\DoctrineServiceProvider;
+use Silex\Provider\FormServiceProvider;
+use Silex\Provider\HttpCacheServiceProvider;
+use Silex\Provider\MonologServiceProvider;
+use Silex\Provider\SecurityServiceProvider;
+use Silex\Provider\ServiceControllerServiceProvider;
+use Silex\Provider\SessionServiceProvider;
+use Silex\Provider\TranslationServiceProvider;
+use Silex\Provider\TwigServiceProvider;
+use Silex\Provider\UrlGeneratorServiceProvider;
+use Silex\Provider\ValidatorServiceProvider;
+use Silex\ServiceProviderInterface;
+use Symfony\Component\HttpFoundation\Request;
+
+class Config implements ServiceProviderInterface {
+
+    public function boot(Application $app) {
+        $app->mount("/", $app['mp.user.controllers']);
+        $app["dispatcher"]->addListener(DinnerEvents::BEFORE_CREATE, function($event)use($app) {
+                    // FR : ajoute un utilisateur qui sera propriétaire du dinner , ainsi qu'un rsvp
+                    $app['logger']->info("BEFORE CREATING A DINNER");
+                    $dinner = $event->getSubject();
+                    $user = $app['security']->getToken()->getUser();
+                    $dinner->setHost($user);
+                    $dinner->setHostedBy($user->getUsername());
+                    $rsvp = new Rsvp();
+                    $rsvp->setUser($user);
+                    $rsvp->setAttendeeName($user->getUsername());
+                    $dinner->addRsvp($rsvp);
+                }
+        );
+    }
+
+    public function register(Application $app) {
+
+        $app->register(new DoctrineORMServiceProvider, array(
+            "orm.proxy_dir" => __DIR__ . '/Proxy/',
+            "orm.driver.configs" => array(
+                "default" => array(
+                    "type" => "yaml",
+                    "paths" => array(__DIR__ . "/Resources/doctrine/"),
+                    "namespace" => "Entity"
+                )
+            )
+        ));
+        $app->register(new DoctrineServiceProvider, array(
+            "db.options" => array(
+                "driver" => "pdo_sqlite",
+                "path" => __DIR__ . "/db.sqlite"
+            )
+        ));
+        $app->register(new MonologServiceProvider, array(
+            "monolog.logfile" => __DIR__ . "/../temp/" . date("Y-m-d") . ".txt",
+        ));
+        $app->register(new ConsoleServiceProvider);
+        $app->register(new UrlGeneratorServiceProvider);
+        $app->register(new FormServiceProvider);
+        $app->register(new SessionServiceProvider);
+        $app->register(new ValidatorServiceProvider);
+
+        $app->register(new ServiceControllerServiceProvider);
+        $app->register(new TwigServiceProvider, array(
+            "twig.path" => array(__DIR__ . '/Resources/views/'),
+            'twig.options' => array(
+                'cache' => __DIR__ . '/../temp/Cache')));
+
+        $app->register(new HttpCacheServiceProvider, array(
+            "http_cache.cache_dir" => __DIR__ . "/../temp/http_cache/",
+        ));
+
+
+        $app->register(new TranslationServiceProvider, array(
+                //"locale" => 'fr'
+                )
+        );
+        $app->register(new RouteConfigServiceProvider, array(
+            'mp.route_loader.cache' => __DIR__ . "/../temp/routing",
+            "mp.route_loader.debug" => false,
+        ));
+
+
+        $app->register(new SimpleUserServiceProvider, array(
+            'mp.user.template.layout' => function($app) {
+                return $app['mp.rdv.templates.layout'];
+            }, 'mp.user.user.class' => "Entity\User",
+        ));
+
+
+        $app->register(new RdvServiceProvider, array(
+            "mp.rdv.templates.layout" => "layout.html.twig",
+            'mp.rdv.entity.dinner' => "Entity\Dinner",
+            "mp.rdv.entity.rsvp" => "Entity\Rsvp",
+            "mp.rdv.form.dinner" => "Form\DinnerType",
+            'mp.rdv.routes.path' => __DIR__ . "/Resources/routing/mp_rdv_routes.yml",
+        ));
+        if (!isset($app['no_security']) || $app['no_security'] == false) {
+            $app->register(new SecurityServiceProvider, array(
+                "security.firewalls" => function($app) {
+                    return array(
+                        "secured" => array(
+                            "pattern" => "^/",
+                            "anonymous" => true,
+                            "form" => array(
+                                "login_path" => "/login",
+                                "check_path" => "/login-check",
+                                "always_use_default_target_path" => true,
+                                "default_target_path" => "/profile",
+                            ),
+                            "logout" => array(
+                                "logout_path" => "/logout",
+                                "target" => "/",
+                                "invalidate_session" => true,
+                                "delete_cookies" => true
+                            ),
+                            "users" => $app['mp.user.user_provider']
+                        )
+                    );
+                },
+                "security.access_rules" => array(
+                    array("/login-check", "IS_AUTHENTICATED_FULLY"),
+                    array("/profile", "IS_AUTHENTICATED_FULLY"),
+                    array('/logout', "IS_AUTHENTICATED_FULLY"),
+                    array("^/dinner/create", "IS_AUTHENTICATED_FULLY"),
+                    array("^/dinner/edit", "IS_AUTHENTICATED_FULLY"),
+                )
+                    )
+            );
+        }
+    }
+    
+    /**
+     * FR : si utilisateur n'est pas propriétaire du dinner , abort !
+     * EN : if user doesnt own dinner , abort !
+     * @param \Symfony\Component\HttpFoundation\Request $req
+     * @param \Silex\Application $app
+     */
+    static function beforeRdvDinnerUpdate(Request $req, Application $app) {
+        $user = $app["security"]->getToken()->getUser();
+        $dinnerId = $req->attributes->get("id");
+        $dinner = $app["mp.rdv.service.dinner"]->find($dinnerId);
+        if($dinner->getHost()!=$user){
+            $app->abort(500,"You cant access that resource !");
+        }
+    }
+
+}

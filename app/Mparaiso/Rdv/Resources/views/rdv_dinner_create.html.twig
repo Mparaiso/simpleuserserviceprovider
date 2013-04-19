@@ -1,0 +1,10 @@
+{% extends app['mp.rdv.templates.layout'] %}
+{% block content %}
+<h3>Host a Dinner</h3>
+<form class='form-actions' action="" method='POST' name='{{form.vars.name}}'>
+    {{ form_widget(form)}}
+    <input type="submit" class='btn' value="Edit dinner">
+    <a class='btn' href="{{path('rdv_dinner_index')}}">Cancel</a>
+
+</form>
+{% endblock %}

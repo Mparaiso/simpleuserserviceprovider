@@ -1,0 +1,36 @@
+# Doctrine Mparaiso\User\Entity\User.dcm.yml
+Entity\User:
+  type: entity
+  table: mp_user_users
+  repositoryClass: Repository\UserRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      generator:
+        strategy: AUTO    
+#  inheritanceType: SINGLE_TABLE
+#  discriminatorColumn:
+#    name: discr
+#    type: string
+#    length: 255
+#    
+#  discriminatorMap:
+#    user: Entity\User
+#    baseUser: Mparaiso\User\Entity\User
+#    
+  oneToMany:
+    dinners:
+      targetEntity: Entity\Dinner
+      mappedBy: host
+      cascade: [all]
+    rsvps:
+      targetEntity: Entity\Rsvp
+      mappedBy: user
+      cascade: [all]
+  manyToMany:
+    roles:
+      targetEntity: Mparaiso\User\Entity\Role
+      
+
+   

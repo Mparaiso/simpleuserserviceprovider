@@ -1,0 +1,11 @@
+{% extends app['mp.rdv.templates.layout']%}
+{% block content %}
+<h3>Delete dinner "{{dinner.title}} on {{dinner.eventDate|date}}" </h3>
+
+<p>Please confirm deletion</p>
+<form class='form-actions' action="" method='POST' name='delete-dinner'>
+    <input type="submit" class='btn' value="Delete dinner" name="delete-dinner">
+    <a class='btn' href="{{path('rdv_dinner_index')}}">Cancel</a>
+
+</form>
+{% endblock %}

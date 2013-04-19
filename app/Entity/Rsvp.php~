@@ -1,0 +1,102 @@
+<?php
+
+namespace Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Mparaiso\Rdv\Entity\BaseRsvp;
+
+/**
+ * Rsvp
+ */
+class Rsvp extends BaseRsvp {
+
+    /**
+     * @var integer
+     */
+    private $id;
+
+    /**
+     * @var string
+     */
+    private $attendeeName;
+
+    /**
+     * @var \Entity\User
+     */
+    private $user;
+    
+    private $dinner;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * Set attendeeName
+     *
+     * @param string $attendeeName
+     * @return Rsvp
+     */
+    public function setAttendeeName($attendeeName) {
+        $this->attendeeName = $attendeeName;
+
+        return $this;
+    }
+
+    /**
+     * Get attendeeName
+     *
+     * @return string 
+     */
+    public function getAttendeeName() {
+        return $this->attendeeName;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Entity\User $user
+     * @return Rsvp
+     */
+    public function setUser(\Entity\User $user = null) {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Entity\User 
+     */
+    public function getUser() {
+        return $this->user;
+    }
+
+    public function setDinner(Dinner $dinner = null) {
+        $this->dinner = $dinner;
+    }
+
+    public function getDinner() {
+        return $this->dinner;
+    }
+
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     * @return Rsvp
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    
+        return $this;
+    }
+}

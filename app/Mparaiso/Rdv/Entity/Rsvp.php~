@@ -1,0 +1,83 @@
+<?php
+
+namespace Mparaiso\Rdv\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Rsvp
+ */
+class Rsvp
+{
+    /**
+     * @var integer
+     */
+    private $id;
+
+    /**
+     * @var string
+     */
+    private $attendeeName;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set attendeeName
+     *
+     * @param string $attendeeName
+     * @return Rsvp
+     */
+    public function setAttendeeName($attendeeName)
+    {
+        $this->attendeeName = $attendeeName;
+    
+        return $this;
+    }
+
+    /**
+     * Get attendeeName
+     *
+     * @return string 
+     */
+    public function getAttendeeName()
+    {
+        return $this->attendeeName;
+    }
+    /**
+     * @var Dinner
+     */
+    private $dinner;
+
+
+    /**
+     * Set dinner
+     *
+     * @param Dinner $dinner
+     * @return Rsvp
+     */
+    public function setDinner(Dinner $dinner = null)
+    {
+        $this->dinner = $dinner;
+    
+        return $this;
+    }
+
+    /**
+     * Get dinner
+     *
+     * @return Dinner 
+     */
+    public function getDinner()
+    {
+        return $this->dinner;
+    }
+}

@@ -1,0 +1,13 @@
+Mparaiso\Rdv\Entity\BaseRsvp:
+    type: mappedSuperclass
+    table: Rsvp
+    fields:
+        attendeeName:
+            type: string
+            length: 50
+    #manyToOne:
+#      #@note @doctrine manyToOne
+#      dinner:
+#        targetEntity: Mparaiso\Rdv\Entity\BaseDinner
+#        inversedBy: rsvps
+#    lifecycleCallbacks: {  }

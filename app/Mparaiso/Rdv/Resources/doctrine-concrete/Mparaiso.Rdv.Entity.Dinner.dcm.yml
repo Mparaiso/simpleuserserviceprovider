@@ -1,0 +1,21 @@
+Mparaiso\Rdv\Entity\BaseDinner:
+    type: mappedSuperclass
+    table: mp_rdv_dinner
+    repositoryClass : Mparaiso\Rdv\Repository\DinnerRepository
+    fields:
+      
+        id:
+          id: true
+          type: integer
+          generator:
+            strategy: auto
+        hostedBy:
+          type: string
+          length: 20
+          fixed: false   
+          
+    oneToMany:
+      rsvps:
+        targetEntity: Mparaiso\Rdv\Entity\Rsvp
+        mappedBy: dinner
+    lifecycleCallbacks: {  }

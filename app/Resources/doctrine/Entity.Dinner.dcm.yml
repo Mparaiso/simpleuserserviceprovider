@@ -1,0 +1,30 @@
+Entity\Dinner:
+    type: entity
+    table: mp_rdv_dinners
+    fields:
+        id:
+            id: true
+            type: integer
+            generator:
+                strategy: AUTO
+    manyToOne:
+      host:
+        targetEntity: Entity\User
+        inversedBy: dinners
+        cascade: [all]
+    oneToMany:
+      rsvps:
+        targetEntity: Entity\Rsvp
+        mappedBy: dinner
+        cascade: [all]
+    #@note @doctrine entity inheritance
+#    inheritanceType: SINGLE_TABLE
+#    discriminatorColumn:
+#      name: discr
+#      type: string
+#      length: 255
+#    discriminatorMap:
+#      dinner: Entity\Dinner
+#      baseDinner: Mparaiso\Rdv\Entity\BaseDinner
+
+                

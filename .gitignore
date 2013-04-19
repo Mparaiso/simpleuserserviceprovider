@@ -1,7 +1,7 @@
 temp/*
 composer.lock
 vendor/*
-app/*
+#app/*
 console.php
 nbproject
-web/*
+#web/*
