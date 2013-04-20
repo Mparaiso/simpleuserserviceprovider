@@ -2,31 +2,46 @@
 {% block content %}
 <div>
 {% if dinner is not null %}
-<h4>{{ dinner.title }} </h4>
-<p><b>When</b>: {{ dinner.eventDate|date}}</p>
-<p><b>Description</b>:{{ dinner.description }}</p>
-<p><b>Where</b>: {{dinner.address}}</p>
-<p><b>Organizer</b>: {{ dinner.hostedBy}}</p>
-<p>
+        <h4>{{ dinner.title }} </h4>
+        <p><b>When</b>: {{ dinner.eventDate|date}}</p>
+        <p><b>Description</b>:{{ dinner.description }}</p>
+        <p><b>Where</b>: {{dinner.address}}</p>
+        <p><b>Organizer</b>: {{ dinner.hostedBy}}</p>
+        <p>
 {% if app.security.token.user == dinner.host %}
-<a href="{{path('rdv_dinner_update',{id:dinner.id}) }}">Edit</a> | 
-<a href="{{path('rdv_dinner_delete',{id:dinner.id}) }}">Delete</a> | 
+                <a href="{{path('rdv_dinner_update',{id:dinner.id}) }}">Edit</a> | 
+                <a href="{{path('rdv_dinner_delete',{id:dinner.id}) }}">Delete</a> | 
 {% endif %}
-<a href="{{path('rdv_dinner_index')}}">Back to index</a>
-</p>
-<p>
-{% if app.security.isGranted('IS_AUTHENTICATED_FULLY') %}
-        {% if dinner.isUserRegistered(app.security.token.user) %}
-        <span class='text-success'>You are registered for this event !</span>
-        {% else %} 
-        <span class='text-info'>You are not registerd for this event.</span>
-{% endif %}
-        {% else %}
-        <a href="{{path('mp.user.route.login')}}">Logon</a> to RSVP for this event.
-{% endif %}
-</p>
+                <a href="{{path('rdv_dinner_index')}}">Back to index</a>
+            </p>
+{% include 'rdv_dinner_read_register.html.twig'%}
 {% else %}
-        no dinner found
+            no dinner found
 {% endif %}
-    </div>
+        </div>
+{% endblock %}
+{% block scripts %}
+{{ parent()}}
+        <script type="text/javascript">
+            $(function() {
+                var ajax = null;
+                var registerAction = function(event) {
+                    var t = event.currentTarget;
+                    var $rsvpmsq = $("#rsvpmsq");
+                    if (ajax === null) {
+                        ajax = $.get(t.getAttribute("data-url"), function(data) {
+                            $rsvpmsq.fadeOut(500, function(el) {
+                                 $rsvpmsq.text(data.message);
+                                 $rsvpmsq.fadeIn(400);
+                            });
+                            return false;
+                        });
+                    }
+                };
+                $('#unregister-button').on('click', registerAction);
+                $('#register-button').on('click', registerAction);
+                return false;
+            });
+
+            </script>
 {% endblock %}

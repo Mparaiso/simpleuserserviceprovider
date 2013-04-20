@@ -6,5 +6,9 @@ home:
 dinner:
   prefix: /dinner
   resource: dinner.yml
+  
+rsvp:
+  prefix: /rsvp
+  resource: rsvp.yml
  # options:
    # _before_middlewares: [ Controller\DinnerController::before ]

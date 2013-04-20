@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping\Driver\YamlDriver;
 use Mparaiso\Rdv\Controller\DinnerController;
 use Mparaiso\Rdv\Service\DinnerService;
 use Mparaiso\Rdv\Service\RsvpService;
+use Mparaiso\Rdv\Controller\RsvpController;
 use Silex\Application;
 use Silex\ServiceControllerResolver;
 use Silex\ServiceProviderInterface;
@@ -76,6 +77,10 @@ class RdvServiceProvider implements ServiceProviderInterface {
                 });
         $app['mp.rdv.dinner_controller'] = $app->share(function($app) {
                     return new DinnerController($app['mp.rdv.service.dinner']);
+                });
+
+        $app['mp.rdv.controller.rsvp'] = $app->share(function($app) {
+                    return new RsvpController($app['mp.rdv.service.rsvp']);
                 });
     }
 

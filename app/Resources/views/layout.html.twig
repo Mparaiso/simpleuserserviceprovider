@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Nerd dinner</title>
-        <link rel="stylesheet" href="{{app.request.basePath}}/vendor/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{app.request.basePath}}/static/vendor/bootstrap/css/bootstrap.min.css">
     </head>
     <body>
         <div class="navbar navbar-inverse">
@@ -24,6 +24,7 @@
                 </div>
             </div>
             <div class="container">
+            {% include 'noscript.html.twig' %}
             {% include 'flash.html.twig' %}
            {% block content %}
            {% endblock %}
@@ -36,5 +37,8 @@
                             font-family: 'Open Sans','Carme',sans-serif;
                         }
                     </style>
+                    {% block scripts %}
+                    <script type="text/javascript" src='{{app.request.baseUrl}}/static/js/jquery.min.js'></script>
+{% endblock %}
                 </body>
             </html>

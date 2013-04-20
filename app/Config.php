@@ -7,6 +7,7 @@ use Mparaiso\Provider\RdvServiceProvider;
 use Mparaiso\Provider\RouteConfigServiceProvider;
 use Mparaiso\Provider\SimpleUserServiceProvider;
 use Mparaiso\Rdv\Event\DinnerEvents;
+use Mparaiso\Rdv\Event\RsvpEvents;
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\FormServiceProvider;
@@ -20,6 +21,7 @@ use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
 use Silex\ServiceProviderInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 
 class Config implements ServiceProviderInterface {
@@ -40,6 +42,8 @@ class Config implements ServiceProviderInterface {
                     $dinner->addRsvp($rsvp);
                 }
         );
+        $app['dispatcher']->addListener(RsvpEvents::BEFORE_CREATE, $app["before_rsvp_create"]);
+        $app["dispatcher"]->addListener(RsvpEvents::BEFORE_DELETE, $app["before_rsvp_delete"]);
     }
 
     public function register(Application $app) {
@@ -81,7 +85,7 @@ class Config implements ServiceProviderInterface {
 
 
         $app->register(new TranslationServiceProvider, array(
-                //"locale" => 'fr'
+            "locale" => 'fr'
                 )
         );
         $app->register(new RouteConfigServiceProvider, array(
@@ -115,7 +119,7 @@ class Config implements ServiceProviderInterface {
                                 "login_path" => "/login",
                                 "check_path" => "/login-check",
                                 "always_use_default_target_path" => false,
-                               // "default_target_path" => null,
+                            // "default_target_path" => null,
                             ),
                             "logout" => array(
                                 "logout_path" => "/logout",
@@ -137,13 +141,39 @@ class Config implements ServiceProviderInterface {
                     )
             );
         }
+        $app['before_rsvp_create'] = $app->protect(function(GenericEvent $event)use($app) {
+                    $rsvp = $event->getSubject();
+                    $dinner = $event->getArgument("dinner");
+                    $user = $app["security"]->getToken()->getUser();
+                    if (!$dinner->isUserRegistered($user)) {
+                        $rsvp->setAttendeeName($user->getUsername());
+                        $rsvp->setUser($user);
+                    } else {
+                        $app->abort(500, 'user already registered to the event!');
+                    }
+                }
+        );
+        $app['before_rsvp_delete'] = $app->protect(function(GenericEvent $event)use($app) {
+                    $rsvp = $event->getSubject();
+                    $dinner = $event->getArgument("dinner");
+                    $attendeeName = $event->getArgument("attendeeName");
+                    $user = $app["security"]->getToken()->getUser();
+                    if ($user->getUsername() != $attendeeName) {
+                        $app->abort(500, 'user cant unregister this attendee  ');
+                    } elseif (!$dinner->isUserRegistered($user)) {
+                        $app->abort(500, 'user is not registered to the event!');
+                    } elseif ($dinner->getHost() == $user) {
+                        $app->abort(500, 'you cant unregistered from your own event!');
+                    }
+                }
+        );
     }
 
     /**
      * FR : si utilisateur n'est pas propriétaire du dinner , abort !
      * EN : if user doesnt own dinner , abort !
-     * @param \Symfony\Component\HttpFoundation\Request $req
-     * @param \Silex\Application $app
+     * @param Request $req
+     * @param Application $app
      */
     static function beforeRdvDinnerUpdate(Request $req, Application $app) {
         $user = $app["security"]->getToken()->getUser();

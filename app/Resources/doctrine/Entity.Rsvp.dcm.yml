@@ -13,11 +13,11 @@ Entity\Rsvp:
       dinner:
         targetEntity: Entity\Dinner
         inversedBy: rsvps
-        cascade: [all]
+        cascade: [persist]
       user:
         targetEntity: Entity\User
         inversedBy: rsvps
-        cascade: [all]
+        cascade: [persist]
 #      #@note @doctrine manyToOne
 #      dinner:
 #        targetEntity: Mparaiso\Rdv\Entity\BaseDinner

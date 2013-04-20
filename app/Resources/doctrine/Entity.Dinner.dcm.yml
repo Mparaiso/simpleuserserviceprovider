@@ -11,12 +11,12 @@ Entity\Dinner:
       host:
         targetEntity: Entity\User
         inversedBy: dinners
-        cascade: [all]
+        cascade: [persist]
     oneToMany:
       rsvps:
         targetEntity: Entity\Rsvp
         mappedBy: dinner
-        cascade: [all]
+        cascade: [persist]
     #@note @doctrine entity inheritance
 #    inheritanceType: SINGLE_TABLE
 #    discriminatorColumn:

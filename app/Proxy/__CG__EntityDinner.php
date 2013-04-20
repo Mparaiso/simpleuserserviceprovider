@@ -51,25 +51,13 @@ class Dinner extends \Entity\Dinner implements \Doctrine\ORM\Proxy\Proxy
         return parent::getId();
     }
 
-    public function setUser(\Entity\User $user = NULL)
-    {
-        $this->__load();
-        return parent::setUser($user);
-    }
-
-    public function getUser()
-    {
-        $this->__load();
-        return parent::getUser();
-    }
-
-    public function addRsvp(\Mparaiso\Rdv\Entity\Rsvp $rsvps)
+    public function addRsvp(\Entity\Rsvp $rsvps)
     {
         $this->__load();
         return parent::addRsvp($rsvps);
     }
 
-    public function removeRsvp(\Mparaiso\Rdv\Entity\Rsvp $rsvps)
+    public function removeRsvp(\Entity\Rsvp $rsvps)
     {
         $this->__load();
         return parent::removeRsvp($rsvps);
@@ -79,6 +67,24 @@ class Dinner extends \Entity\Dinner implements \Doctrine\ORM\Proxy\Proxy
     {
         $this->__load();
         return parent::getRsvps();
+    }
+
+    public function setHost(\Entity\User $host = NULL)
+    {
+        $this->__load();
+        return parent::setHost($host);
+    }
+
+    public function getHost()
+    {
+        $this->__load();
+        return parent::getHost();
+    }
+
+    public function isUserRegistered(\Mparaiso\User\Entity\BaseUser $user)
+    {
+        $this->__load();
+        return parent::isUserRegistered($user);
     }
 
     public function setTitle($title)
@@ -115,18 +121,6 @@ class Dinner extends \Entity\Dinner implements \Doctrine\ORM\Proxy\Proxy
     {
         $this->__load();
         return parent::getDescription();
-    }
-
-    public function setHostedBy($hostedBy)
-    {
-        $this->__load();
-        return parent::setHostedBy($hostedBy);
-    }
-
-    public function getHostedBy()
-    {
-        $this->__load();
-        return parent::getHostedBy();
     }
 
     public function setContactPhone($contactPhone)
@@ -189,10 +183,22 @@ class Dinner extends \Entity\Dinner implements \Doctrine\ORM\Proxy\Proxy
         return parent::getLongitude();
     }
 
+    public function setHostedBy($hostedBy)
+    {
+        $this->__load();
+        return parent::setHostedBy($hostedBy);
+    }
+
+    public function getHostedBy()
+    {
+        $this->__load();
+        return parent::getHostedBy();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'title', 'eventDate', 'description', 'hostedBy', 'contactPhone', 'address', 'country', 'latitude', 'longitude', 'id', 'user');
+        return array('__isInitialized__', 'title', 'eventDate', 'description', 'hostedBy', 'contactPhone', 'address', 'country', 'latitude', 'longitude', 'id', 'rsvps', 'host');
     }
 
     public function __clone()

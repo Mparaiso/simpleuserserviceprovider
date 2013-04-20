@@ -73,7 +73,7 @@ class DinnerController {
             if ($form->isValid()) {
                 $app['dispatcher']->dispatch(DinnerEvents::BEFORE_UPDATE, new GenericEvent($dinner));
                 $this->ds->save($dinner);
-                $app['dispatch']->dispatch(DinnerEvents::AFTER_UPDATE, new GenericEvent(($dinner)));
+                $app['dispatcher']->dispatch(DinnerEvents::AFTER_UPDATE, new GenericEvent(($dinner)));
                 $app['session']->getFlashBag()->set('success', "Dinnner \"{$dinner->getTitle()}\" updated!");
                 return $app->redirect($app['url_generator']->generate('rdv_dinner_read', array(
                                     'id' => $id,

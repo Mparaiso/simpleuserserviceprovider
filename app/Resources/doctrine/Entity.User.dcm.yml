@@ -23,11 +23,11 @@ Entity\User:
     dinners:
       targetEntity: Entity\Dinner
       mappedBy: host
-      cascade: [all]
+      cascade: [persist]
     rsvps:
       targetEntity: Entity\Rsvp
       mappedBy: user
-      cascade: [all]
+      cascade: [persist]
   manyToMany:
     roles:
       targetEntity: Mparaiso\User\Entity\Role
