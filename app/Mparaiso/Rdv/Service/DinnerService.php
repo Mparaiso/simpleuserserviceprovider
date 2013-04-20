@@ -66,5 +66,6 @@ class DinnerService {
         $this->em->flush();
         return $dinner;
     }
+    
 
 }

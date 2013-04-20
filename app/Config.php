@@ -36,6 +36,7 @@ class Config implements ServiceProviderInterface {
                     $rsvp = new Rsvp();
                     $rsvp->setUser($user);
                     $rsvp->setAttendeeName($user->getUsername());
+                    $rsvp->setDinner($dinner);
                     $dinner->addRsvp($rsvp);
                 }
         );
@@ -85,7 +86,7 @@ class Config implements ServiceProviderInterface {
         );
         $app->register(new RouteConfigServiceProvider, array(
             'mp.route_loader.cache' => __DIR__ . "/../temp/routing",
-            "mp.route_loader.debug" => false,
+                # "mp.route_loader.debug" => false,
         ));
 
 
@@ -113,8 +114,8 @@ class Config implements ServiceProviderInterface {
                             "form" => array(
                                 "login_path" => "/login",
                                 "check_path" => "/login-check",
-                                "always_use_default_target_path" => true,
-                                "default_target_path" => "/profile",
+                                "always_use_default_target_path" => false,
+                               // "default_target_path" => null,
                             ),
                             "logout" => array(
                                 "logout_path" => "/logout",
@@ -137,7 +138,7 @@ class Config implements ServiceProviderInterface {
             );
         }
     }
-    
+
     /**
      * FR : si utilisateur n'est pas propriétaire du dinner , abort !
      * EN : if user doesnt own dinner , abort !
@@ -148,8 +149,8 @@ class Config implements ServiceProviderInterface {
         $user = $app["security"]->getToken()->getUser();
         $dinnerId = $req->attributes->get("id");
         $dinner = $app["mp.rdv.service.dinner"]->find($dinnerId);
-        if($dinner->getHost()!=$user){
-            $app->abort(500,"You cant access that resource !");
+        if ($dinner->getHost() != $user) {
+            $app->abort(500, "You cant access that resource !");
         }
     }
 

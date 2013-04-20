@@ -5,6 +5,7 @@ namespace Mparaiso\Provider;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
 use Mparaiso\Rdv\Controller\DinnerController;
 use Mparaiso\Rdv\Service\DinnerService;
+use Mparaiso\Rdv\Service\RsvpService;
 use Silex\Application;
 use Silex\ServiceControllerResolver;
 use Silex\ServiceProviderInterface;
@@ -59,9 +60,9 @@ class RdvServiceProvider implements ServiceProviderInterface {
         $app['mp.rdv.orm.namespace'] = "Mparaiso\Rdv\Entity";
         $app['mp.rdv.entity.dinner'] = "Mparaiso\Rdv\Entity\BaseDinner";
         $app['mp.rdv.entity.rsvp'] = "Mparaiso\Rdv\Entity\BaseRsvp";
-        
-        $app['mp.rdv.form.dinner'] ="Mparaiso\Rdv\Form\DinnerType";
-        
+
+        $app['mp.rdv.form.dinner'] = "Mparaiso\Rdv\Form\DinnerType";
+
         $app['mp.rdv.orm.resources.paths'] = __DIR__ . '/../Rdv/Resources/doctrine/';
         $app['mp.rdv.orm.em'] = $app->share(function($app) {
                     return $app['orm.em'];
@@ -69,6 +70,9 @@ class RdvServiceProvider implements ServiceProviderInterface {
 
         $app["mp.rdv.service.dinner"] = $app->share(function($app) {
                     return new DinnerService($app['mp.rdv.orm.em'], $app['mp.rdv.entity.dinner']);
+                });
+        $app['mp.rdv.service.rsvp'] = $app->share(function($app) {
+                    return new RsvpService($app['mp.rdv.orm.em'], $app['mp.rdv.entity.rsvp']);
                 });
         $app['mp.rdv.dinner_controller'] = $app->share(function($app) {
                     return new DinnerController($app['mp.rdv.service.dinner']);

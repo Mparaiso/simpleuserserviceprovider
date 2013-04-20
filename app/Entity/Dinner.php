@@ -3,12 +3,14 @@
 namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Mparaiso\User\Entity\BaseUser;
+use Mparaiso\Rdv\Entity\BaseRsvp;
 
 /**
  * Dinner
  */
-class Dinner extends \Mparaiso\Rdv\Entity\BaseDinner
-{
+class Dinner extends \Mparaiso\Rdv\Entity\BaseDinner {
+
     /**
      * @var integer
      */
@@ -27,18 +29,16 @@ class Dinner extends \Mparaiso\Rdv\Entity\BaseDinner
     /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->rsvps = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -48,10 +48,9 @@ class Dinner extends \Mparaiso\Rdv\Entity\BaseDinner
      * @param \Entity\Rsvp $rsvps
      * @return Dinner
      */
-    public function addRsvp(\Entity\Rsvp $rsvps)
-    {
+    public function addRsvp(\Entity\Rsvp $rsvps) {
         $this->rsvps[] = $rsvps;
-    
+
         return $this;
     }
 
@@ -60,8 +59,7 @@ class Dinner extends \Mparaiso\Rdv\Entity\BaseDinner
      *
      * @param \Entity\Rsvp $rsvps
      */
-    public function removeRsvp(\Entity\Rsvp $rsvps)
-    {
+    public function removeRsvp(\Entity\Rsvp $rsvps) {
         $this->rsvps->removeElement($rsvps);
     }
 
@@ -70,8 +68,7 @@ class Dinner extends \Mparaiso\Rdv\Entity\BaseDinner
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getRsvps()
-    {
+    public function getRsvps() {
         return $this->rsvps;
     }
 
@@ -81,10 +78,9 @@ class Dinner extends \Mparaiso\Rdv\Entity\BaseDinner
      * @param \Entity\User $host
      * @return Dinner
      */
-    public function setHost(\Entity\User $host = null)
-    {
+    public function setHost(\Entity\User $host = null) {
         $this->host = $host;
-    
+
         return $this;
     }
 
@@ -93,8 +89,17 @@ class Dinner extends \Mparaiso\Rdv\Entity\BaseDinner
      *
      * @return \Entity\User 
      */
-    public function getHost()
-    {
+    public function getHost() {
         return $this->host;
     }
+
+    /**
+     * HELPER METHODS
+     */
+    function isUserRegistered(BaseUser $user) {
+        return $this->rsvps->exists(function($key,Rsvp $rsvp)use($user) {
+                            return $rsvp->getUser() === $user;
+                        });
+    }
+
 }
