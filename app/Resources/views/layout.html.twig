@@ -4,7 +4,11 @@
     <head>
         <meta charset="UTF-8">
         <title>Nerd dinner</title>
+        {% block styles %}
         <link rel="stylesheet" href="{{app.request.basePath}}/static/vendor/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{app.request.basePath}}/static/css/style.css" />
+{% endblock %}
+       
     </head>
     <body>
         <div class="navbar navbar-inverse">

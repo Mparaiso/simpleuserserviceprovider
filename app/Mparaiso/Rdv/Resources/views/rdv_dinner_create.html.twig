@@ -1,10 +1,26 @@
 {% extends app['mp.rdv.templates.layout'] %}
 {% block content %}
 <h3>Host a Dinner</h3>
-<form class='form-actions' action="" method='POST' name='{{form.vars.name}}'>
-    {{ form_widget(form)}}
-    <input type="submit" class='btn' value="Edit dinner">
-    <a class='btn' href="{{path('rdv_dinner_index')}}">Cancel</a>
+<form class='form-actions ' action="" method='POST' name='{{form.vars.name}}'>
+    <div class="span4">
+            {{ form_widget(form)}}
+            <input type="submit" class='btn' value="Edit dinner"/>
+            <a class='btn' href="{{path('rdv_dinner_index')}}">Cancel</a>
+        </div>
+        <div class="span4" style='position:relative;'>
+            <div id="theMap" class="map" data-address="{{dinner.address}}" 
+                 data-title="{{dinner.title}}" 
+                 data-latitude="{{dinner.latitude}}" 
+                 data-longitude="{{dinner.longitude}}">
+            </div>
+        </div>
 
-</form>
+    </form>
+
+
+</style>
+{% endblock %}
+{% block scripts %}
+{{ parent() }}
+    {% include 'rdv_dinner_map.html.twig' %}
 {% endblock %}

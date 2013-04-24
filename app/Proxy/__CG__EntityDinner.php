@@ -87,6 +87,12 @@ class Dinner extends \Entity\Dinner implements \Doctrine\ORM\Proxy\Proxy
         return parent::isUserRegistered($user);
     }
 
+    public function jsonSerialize()
+    {
+        $this->__load();
+        return parent::jsonSerialize();
+    }
+
     public function setTitle($title)
     {
         $this->__load();
@@ -147,6 +153,18 @@ class Dinner extends \Entity\Dinner implements \Doctrine\ORM\Proxy\Proxy
         return parent::getAddress();
     }
 
+    public function getCity()
+    {
+        $this->__load();
+        return parent::getCity();
+    }
+
+    public function setCity($city)
+    {
+        $this->__load();
+        return parent::setCity($city);
+    }
+
     public function setCountry($country)
     {
         $this->__load();
@@ -198,7 +216,7 @@ class Dinner extends \Entity\Dinner implements \Doctrine\ORM\Proxy\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'title', 'eventDate', 'description', 'hostedBy', 'contactPhone', 'address', 'country', 'latitude', 'longitude', 'id', 'rsvps', 'host');
+        return array('__isInitialized__', 'title', 'eventDate', 'description', 'hostedBy', 'contactPhone', 'address', 'city', 'country', 'latitude', 'longitude', 'id', 'rsvps', 'host');
     }
 
     public function __clone()

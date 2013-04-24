@@ -9,7 +9,7 @@ use Mparaiso\Rdv\Entity\BaseRsvp;
 /**
  * Dinner
  */
-class Dinner extends \Mparaiso\Rdv\Entity\BaseDinner {
+class Dinner extends \Mparaiso\Rdv\Entity\BaseDinner implements  \JsonSerializable {
 
     /**
      * @var integer
@@ -98,8 +98,31 @@ class Dinner extends \Mparaiso\Rdv\Entity\BaseDinner {
      */
     function isUserRegistered(BaseUser $user) {
         return $this->rsvps->exists(function($key,Rsvp $rsvp)use($user) {
-                            return $rsvp->getUser() === $user;
-                        });
+            return $rsvp->getUser() === $user;
+        });
     }
 
+
+    /**
+     * @note @php json serializer une classe
+     */
+    function jsonSerialize(){
+        return array(
+            "id"=>$this->id,
+            "latitude"=>$this->latitude,
+            "longitude"=>$this->longitude,
+            "city"=>$this->city,
+            "country"=>$this->country,
+            "address"=>$this->address,
+            "eventDate"=>$this->eventDate,
+            "title"=>$this->title,
+            "description"=>$this->description,
+            "host"=>array(
+                "username"=>$this->host->getUsername(),
+                "id"=>$this->host->getId()
+                )
+            );
+    }
+
+    
 }

@@ -10,40 +10,56 @@ use Mparaiso\Rdv\Service\DinnerService;
 use Silex\Application;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class DinnerController {
+class DinnerController
+{
 
     /**
-     * @var DinnerService 
+     * @var DinnerService
      */
     private $ds;
     private $twig;
 
-    function __construct(DinnerService $ds) {
+    function __construct(DinnerService $ds)
+    {
         $this->ds = $ds;
     }
 
-    function index(Request $req, Application $app) {
-        $offset = (int) $req->query->get("offset", 0);
-        $limit = (int) $req->query->get("limit", 10);
+    function index(Request $req, Application $app, $format)
+    {
+        $offset  = (int)$req->query->get("offset", 0);
+        $limit   = (int)$req->query->get("limit", 10);
         $dinners = $this->ds->findUpcomingDinners($offset * $limit, $limit);
-        $count = $this->ds->count();
-        return $app['twig']->render("rdv_dinner_index.html.twig", array(
-                    "dinners" => $dinners,
-                    "offset" => $offset,
-                    "limit" => $limit,
-                    "count" => $count,
-        ));
+        $count   = $this->ds->count();
+        if ("json" === $format) {
+            return $app->json(array(
+                "offset"  => $offset,
+                "limit"   => $limit,
+                "dinners" => $dinners,
+                "count"   => $count
+            ));
+        } else {
+            return $app['twig']->render("rdv_dinner_index.$format.twig", array(
+                "dinners" => $dinners,
+                "offset"  => $offset,
+                "limit"   => $limit,
+                "count"   => $count,
+            ));
+        }
+
     }
 
-    function read(Application $app, $id) {
+    function read(Application $app, $id)
+    {
         return $app['twig']->render($app['mp.rdv.templates.dinner.read'], array(
-                    "dinner" => $this->ds->find($id),
+            "dinner" => $this->ds->find($id),
         ));
     }
 
-    function create(Request $r, Application $app) {
-        $d = new $app['mp.rdv.entity.dinner'];
+    function create(Request $r, Application $app)
+    {
+        $d    = new $app['mp.rdv.entity.dinner'];
         $type = new $app['mp.rdv.form.dinner'];
         $form = $app['form.factory']->create($type, $d);
         if ("POST" === $r->getMethod()) {
@@ -54,18 +70,20 @@ class DinnerController {
                 $app["dispatcher"]->dispatch(DinnerEvents::AFTER_CREATE, new GenericEvent($d));
                 $app['session']->getFlashBag()->set('success', "Dinnner \"{$d->getTitle()}\" saved!");
                 return $app->redirect($app['url_generator']->generate('rdv_dinner_read', array(
-                                    'id' => $d->getId()
+                    'id' => $d->getId()
                 )));
             }
         }
         return $app['twig']->render($app['mp.rdv.templates.dinner.create'], array(
-                    'form' => $form->createView()
+            'form'   => $form->createView(),
+            "dinner" => $d
         ));
     }
 
-    function update(Request $r, Application $app, $id) {
+    function update(Request $r, Application $app, $id)
+    {
         $dinner = $this->ds->find($id);
-        $dinner === null AND $app->abort(500, 'dinner not found');
+        $dinner === NULL AND $app->abort(500, 'dinner not found');
         $type = new $app['mp.rdv.form.dinner'];
         $form = $app['form.factory']->create($type, $dinner);
         if ("POST" === $r->getMethod()) {
@@ -76,28 +94,31 @@ class DinnerController {
                 $app['dispatcher']->dispatch(DinnerEvents::AFTER_UPDATE, new GenericEvent(($dinner)));
                 $app['session']->getFlashBag()->set('success', "Dinnner \"{$dinner->getTitle()}\" updated!");
                 return $app->redirect($app['url_generator']->generate('rdv_dinner_read', array(
-                                    'id' => $id,
+                    'id'     => $id,
+                    "dinner" => $dinner
                 )));
             }
         }
         return $app['twig']->render($app['mp.rdv.templates.dinner.update'], array(
-                    'form' => $form->createView()
-                        )
+                'form'   => $form->createView(),
+                "dinner" => $dinner,
+            )
         );
     }
 
-    function delete(Request $r, Application $app, $id) {
+    function delete(Request $r, Application $app, $id)
+    {
         $dinner = $this->ds->find($id);
-        $dinner === null AND $app->abort(500, "Resource not found");
-        if ("POST" === $r->getMethod() && $r->get('delete-dinner') !== null) {
-            $app['dispatcher']->dispatch(DinnnerEvents::BEFORE_DELETE,new GenericEvent($dinner));
+        $dinner === NULL AND $app->abort(500, "Resource not found");
+        if ("POST" === $r->getMethod() && $r->get('delete-dinner') !== NULL) {
+            $app['dispatcher']->dispatch(DinnnerEvents::BEFORE_DELETE, new GenericEvent($dinner));
             $this->ds->delete($dinner);
-            $app['dispatcher']->dispatch(DinnnerEvents::AFTER_DELETE,new GenericEvent($dinner));
+            $app['dispatcher']->dispatch(DinnnerEvents::AFTER_DELETE, new GenericEvent($dinner));
             $app["session"]->getFlashBag()->set("success", "Dinner {$dinner->getTitle()} deleted");
             return $app->redirect($app['url_generator']->generate("rdv_dinner_index"));
         }
         return $app['twig']->render($app['mp.rdv.templates.dinner.delete'], array(
-                    "dinner" => $dinner,
+            "dinner" => $dinner,
         ));
     }
 

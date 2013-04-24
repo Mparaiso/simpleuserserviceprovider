@@ -1,19 +1,121 @@
 {% extends app['mp.rdv.templates.layout'] %}
 {% block content %}
-<h3>Upcoming dinners</h3>
-<div>
-  {# <p> <a class='btn' href="{{path('rdv_dinner_create')}}">Add a dinner</a></p>#}
-{% for dinner in dinners %}
-        <p>
-            <a href="{{path('rdv_dinner_read',{id:dinner.id})}}">{{ dinner.title }}</a> on {{ dinner.eventDate|date }}</p>
+    <div class="row">
 
-{% endfor %}
-        <div class="pagination  pagination-centered">
-        <ul class=''>
-            <li><a {% if offset > 0 %}href="?offset={{offset-1}}"{%else%}class='disabled muted'{%endif%}>Prev</a></li>
-            <li><a {% if dinners|length == limit %}href="?offset={{offset+1}}"{%else%}class='disabled muted'{%endif%}>Next</a></li>
+        <div class="span6" style='position:relative;'>
+            <div id='map' style='width:400px;height:400px;position:absolute;overflow:visible;'></div>
+        </div>
+        <div class='span6'>
+            <h3>Upcoming dinners</h3>
+            {% for dinner in dinners %}
+                <p>
+                    <a href="{{ path('rdv_dinner_read',{id:dinner.id}) }}">{{ dinner.title }}</a>
+                    on {{ dinner.eventDate|date }}
+                    <small>({{ dinner.rsvps|length }} rsvps )</small>
+                </p>
+            {% endfor %}
+        </div>
+    </div>
 
-        </ul>
-                </div>
-    </div>   
+    {#<div class='row'>
+      {% include 'mp.rdv.pagination.html.twig' %}
+    </div> #}
+{% endblock %}
+{% block scripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+    <script type="text/javascript">
+        (function (window, $) {
+            /**
+             *
+             */
+            $.fn.bingMap = function (pins, mapOptions, pluginOptions) {
+                var defaultMapOptions = {
+                    credentials:"AiXhX2mvYB4p1IKybImtVSgvp3ZMVh42GxPVLyHaN9RCWl9mq0GvMCCsA7sz_LKE",
+                    mapTypeId:Microsoft.Maps.MapTypeId.road,
+                    showDashboard:false,
+                    zoom:16
+                };
+
+                mapParams = $.extend(defaultMapOptions, mapOptions);
+                return this.each(function () {
+                    var _locations = [], _pins = [], _infoBoxs = [], _boundingBox;
+                    var map = new Microsoft.Maps.Map(this, mapParams);
+                    if (pins instanceof Array && pins.length > 0) {
+                        _length = pins.length;
+                        for (i = 0; i < _length; i++) {
+                            _locations[i] = new Microsoft.Maps.Location(pins[i].latitude, pins[i].longitude);
+                            _pins[i] = new Microsoft.Maps.Pushpin(_locations[i], pins[i].options);
+                            if (typeof pins[i].infoBox !== "undefined") {
+                                _infoBoxs[i] = new Microsoft.Maps.Infobox(_locations[i],
+                                        {
+                                            showCloseButton:false,
+                                            offset:new Microsoft.Maps.Point(10, 40),
+                                            showPointer:false, title:pins[i].infoBox.title,
+                                            description:pins[i].infoBox.description,
+                                            visible:false
+                                        }
+                                );
+                                map.entities.push(_infoBoxs[i]);
+                            }
+                            map.entities.push(_pins[i]);
+                            Microsoft.Maps.Events.addHandler(_pins[i], "click", (function () {
+                                var _i = i;
+                                return function () {
+                                    window.location = "/dinner/" + pins[_i].id;
+                                };
+                            })());
+                            Microsoft.Maps.Events.addHandler(_pins[i], "mouseover", (function () {
+                                var _i = i;
+                                return function () {
+                                    _infoBoxs[_i].setOptions({visible:true});
+                                };
+                            })());
+                            Microsoft.Maps.Events.addHandler(_pins[i], "mouseout", (function () {
+                                var _i = i;
+                                return function () {
+                                    _infoBoxs[_i].setOptions({visible:false});
+                                };
+                            })());
+
+                        }
+                        _boundingBox = Microsoft.Maps.LocationRect.fromLocations.apply(null, _locations);
+                        map.setView({'bounds':_boundingBox});
+                    }
+                    this._isMap = true;
+                    this.getMap = function () {
+                        return map
+                    };
+                });
+            }
+        })(window, jQuery);
+    </script>
+    <script>
+        $(function () {
+            $.getJSON("/dinner/json", function (result) {
+                var pins;
+                console.log(arguments);
+                pins = result.dinners.map(function (dinner) {
+                    return {
+                        id:dinner.id,
+                        latitude:dinner.latitude,
+                        longitude:dinner.longitude,
+                        infoBox:{
+                            title:dinner.title,
+                            description:[dinner.description, dinner.host.username,
+                                dinner.address, dinner.city, dinner.country].join("<br/>"),
+                            showCloseButton:false,
+                            offset:new Microsoft.Maps.Point(10, 40)
+                        },
+                        options:{
+                            //icon:"/static/img/restaurant-icon-optimized.png",
+                            //width:33,height:33
+                        }
+                    }
+                });
+                $("#map").bingMap(pins);
+            });
+        });
+
+    </script>
 {% endblock %}

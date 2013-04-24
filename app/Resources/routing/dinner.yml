@@ -1,7 +1,9 @@
 rdv_dinner_index:
-  path: /
-  defaults: { _controller: 'mp.rdv.dinner_controller:index' , _format: html }
+  path: /{format}
+  defaults: { _controller: 'mp.rdv.dinner_controller:index' , format: html }
   methods: [GET]
+  requirements:
+    format: html|json
   #options: 
    # _before_middlewares: [ Controller\DinnerController::before ] 
  

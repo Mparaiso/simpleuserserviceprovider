@@ -23,6 +23,9 @@ Mparaiso\Rdv\Entity\BaseDinner:
             length: 100
 #            fixed: false
 #            nullable: true
+        city:
+            type: string
+            length: 100
         country:
             type: string
             length: 100

@@ -1,0 +1,19 @@
+{
+    "offset":{{offset}},
+    "limit":{{limit}},
+    "dinners":[
+        {% for dinner in dinners %}{
+            "title":"{{dinner.title|e('html_attr')}}",
+            "description":"{{dinner.description|e('html_attr')}}",
+            "eventDate":"{{dinner.eventDate|date|e('html_attr')}}",
+            "address":"{{dinner.address|e('html_attr')}}",
+            "city":"{{dinner.city|e('html_attr')}}",
+            "country":"{{dinner.country|e('html_attr')}}",
+            "host":"{{dinner.host.username|e('html_attr')}}",
+            "longitude":"{{dinner.longitude|e('html_attr')}}",
+            "latitude":"{{dinner.latitude|e('html_attr')}}"
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ]
+
+}

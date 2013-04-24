@@ -12,41 +12,46 @@ class BaseDinner
     /**
      * @var string
      */
-    private $title;
+    protected $title;
 
     /**
      * @var \DateTime
      */
-    private $eventDate;
+    protected $eventDate;
 
     /**
      * @var string
      */
-    private $description;
+    protected $description;
     /**
      * @var string
      */
-    private $contactPhone;
+    protected $contactPhone;
 
     /**
      * @var string
      */
-    private $address;
+    protected $address;
 
     /**
      * @var string
      */
-    private $country;
+    protected $city;
+
+    /**
+     * @var string
+     */
+    protected $country;
 
     /**
      * @var float
      */
-    private $latitude;
+    protected $latitude;
 
     /**
      * @var float
      */
-    private $longitude;
+    protected $longitude;
 
 
     /**
@@ -165,6 +170,14 @@ class BaseDinner
         return $this->address;
     }
 
+    public function getCity(){
+        return $this->city;
+    }
+
+    public function setCity($city){
+        $this->city = $city;
+        return $this;
+    }
     /**
      * Set country
      *
@@ -236,7 +249,7 @@ class BaseDinner
     /**
      * @var string
      */
-    private $hostedBy;
+    protected $hostedBy;
 
 
     /**

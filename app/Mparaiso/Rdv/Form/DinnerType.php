@@ -17,6 +17,7 @@ class DinnerType extends AbstractType
             ->add('hostedBy')
             ->add('contactPhone')
             ->add('address')
+            ->add("city")
             ->add('country','country')
             ->add('latitude')
             ->add('longitude');

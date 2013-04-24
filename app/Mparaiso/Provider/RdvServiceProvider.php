@@ -13,6 +13,7 @@ use Silex\ServiceProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Locale\Locale;
 
 /*
  * To change this template, choose Tools | Templates
@@ -33,15 +34,15 @@ class RdvServiceProvider implements ServiceProviderInterface {
                     $loader->addPath($app["mp.rdv.templates.path"]); // FR: ajouter le répertoire des templates FOS à TWIG
                     return $loader;
                 }
-        );
+                );
         /** routes extension  */
         $app['mp.route_loader']->add($app['mp.rdv.routes.type'], $app['mp.rdv.routes.path'], $app['mp.rdv.routes.prefix']);
 
         /** orm extension */
         $app["orm.chain_driver"] = $app->extend("orm.chain_driver", function($chain, $app) {
-                    $chain->addDriver(new YamlDriver($app['mp.rdv.orm.resources.paths']), $app['mp.rdv.orm.namespace']);
-                    return $chain;
-                }
+            $chain->addDriver(new YamlDriver($app['mp.rdv.orm.resources.paths']), $app['mp.rdv.orm.namespace']);
+            return $chain;
+        }
         );
     }
 
@@ -66,22 +67,37 @@ class RdvServiceProvider implements ServiceProviderInterface {
 
         $app['mp.rdv.orm.resources.paths'] = __DIR__ . '/../Rdv/Resources/doctrine/';
         $app['mp.rdv.orm.em'] = $app->share(function($app) {
-                    return $app['orm.em'];
-                });
+            return $app['orm.em'];
+        });
 
         $app["mp.rdv.service.dinner"] = $app->share(function($app) {
-                    return new DinnerService($app['mp.rdv.orm.em'], $app['mp.rdv.entity.dinner']);
-                });
+            return new DinnerService($app['mp.rdv.orm.em'], $app['mp.rdv.entity.dinner']);
+        });
         $app['mp.rdv.service.rsvp'] = $app->share(function($app) {
-                    return new RsvpService($app['mp.rdv.orm.em'], $app['mp.rdv.entity.rsvp']);
-                });
+            return new RsvpService($app['mp.rdv.orm.em'], $app['mp.rdv.entity.rsvp']);
+        });
         $app['mp.rdv.dinner_controller'] = $app->share(function($app) {
-                    return new DinnerController($app['mp.rdv.service.dinner']);
-                });
+            return new DinnerController($app['mp.rdv.service.dinner']);
+        });
 
         $app['mp.rdv.controller.rsvp'] = $app->share(function($app) {
-                    return new RsvpController($app['mp.rdv.service.rsvp']);
-                });
+            return new RsvpController($app['mp.rdv.service.rsvp']);
+        });
+
+        $app["twig"] = $app->share($app->extend("twig", function ($twig) {
+            $twig->addFilter("md5", new \Twig_Filter_Function("md5"));
+            //@note @symfony retrouver le nom d'un pays en fonction de code ISO du pays
+            $twig->addFilter("code_to_country", new \Twig_Filter_Function(function ($country) {
+                $countries = Locale::getDisplayCountries(\Locale::getDefault());
+                if(isset($countries[$country])){
+                    return $countries[$country];
+                }else{
+                    return $country;
+                }
+            }));
+            return $twig;
+        })
+        );
     }
 
 }

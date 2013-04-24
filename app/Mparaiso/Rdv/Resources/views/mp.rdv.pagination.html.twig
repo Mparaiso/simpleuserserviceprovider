@@ -1,0 +1,6 @@
+<div class="pagination  pagination-centered">
+    <ul class=''>
+      <li><a {% if offset > 0 %}href="?offset={{offset-1}}"{%else%}class='disabled muted'{%endif%}>Prev</a></li>
+      <li><a {% if dinners|length == limit %}href="?offset={{offset+1}}"{%else%}class='disabled muted'{%endif%}>Next</a></li>
+  </ul>
+</div>
