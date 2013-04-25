@@ -3,15 +3,12 @@
 namespace Mparaiso\User\Entity;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\Regex;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
  * User
  */
-class User extends BaseUser {
+class User extends BaseUser
+{
 
     /**
      * @var integer
@@ -21,10 +18,12 @@ class User extends BaseUser {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
+
 
 }

@@ -1,0 +1,10 @@
+{% extends app['mp.user.template.layout'] %}
+{% block content %}
+    <h4>Update profile</h4>
+    <form action="" method="POST" name='{{ form.vars.name }}'>
+        {{ form_widget(form) }}
+        <input class="btn" type="submit" value="Update">
+        <input class="btn" type="reset" value="Reset">
+        <a class="btn" href="{{ path('mp.user.route.profile.index') }}">Cancel</a>
+    </form>
+{% endblock %}

@@ -30,7 +30,6 @@ class Config implements ServiceProviderInterface
 
     public function boot(Application $app)
     {
-        $app->mount("/", $app['mp.user.controllers']);
         $app["dispatcher"]->addListener(DinnerEvents::BEFORE_CREATE,$app['before_dinner_create']);
         $app['dispatcher']->addListener(RsvpEvents::BEFORE_CREATE, $app["before_rsvp_create"]);
         $app["dispatcher"]->addListener(RsvpEvents::BEFORE_DELETE, $app["before_rsvp_delete"]);
@@ -89,6 +88,7 @@ class Config implements ServiceProviderInterface
             'mp.user.template.layout' => function ($app) {
                 return $app['mp.rdv.templates.layout'];
             }, 'mp.user.user.class'   => 'Entity\User',
+            "mp.user.form.profile.model"=>'Entity\User'
         ));
 
 

@@ -8,11 +8,7 @@ Mparaiso\User\Entity\User:
       id: true
       type: integer
       generator:
-        strategy: AUTO    
-  oneToMany:
-    dinners:
-      targetEntity: Entity\Dinner
-      mappedBy: user
+        strategy: AUTO
       
   manyToMany:
     roles:

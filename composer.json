@@ -1,7 +1,7 @@
 {
     "name": "mparaiso/simpleuserserviceprovider",
     "type": "Silex service provider",
-    "description": "Simple User management for Silex , work in progress",
+    "description": "Simple User management for Silex intended to mimic FOSUserBundle features, work in progress , not production ready yet ! ",
     "keywords": ["User management"],
     "homepage": "https://github.com/Mparaiso/simpleuserserviceprovider",
     "license": "GPL",
@@ -19,6 +19,7 @@
         "symfony/symfony": "2.2.*",
         "swiftmailer/swiftmailer": "*",
         "twig/twig":"*",
+        "mparaiso/routeconfigserviceprovider":"*@dev",
         "mparaiso/consoleserviceprovider":"*@dev",
         "mparaiso/doctrineormserviceprovider":"*@dev",
         "monolog/monolog":"*"

@@ -1,0 +1,30 @@
+mp.user.route.register:
+  path: /register
+  defaults: { _controller: mp.user.controller.registration:register }
+
+mp.user.route.login:
+  path: /login
+  defaults: {_controller: mp.user.controller.security:login }
+
+mp.user.route.logout:
+  path: /logout
+  defaults: { _controller: mp.user.controller.security:logout }
+
+mp.user.route.login.check:
+  path: /login-check
+  defaults: {_controller: mp.user.controller.security:loginCheck }
+
+mp.user.route.profile.index:
+  path: /profile
+  defaults: { _controller: mp.user.controller.profile:index }
+
+mp.user.route.profile.update:
+  path: /profile/update
+  defaults: {_controller: mp.user.controller.profile:update }
+
+mp.user.route.profile.read:
+  path: /profile/user/{username}
+  defaults: { _controller: mp.user.controller.profile:read }
+  requirements:
+    username: \w+
+
