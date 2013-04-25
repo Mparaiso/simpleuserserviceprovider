@@ -1,6 +1,6 @@
 {
     "name": "mparaiso/simpleuserserviceprovider",
-    "type": "Silex service provider",
+    "type": "provider",
     "description": "Simple User management for Silex intended to mimic FOSUserBundle features, work in progress , not production ready yet ! ",
     "keywords": ["User management"],
     "homepage": "https://github.com/Mparaiso/simpleuserserviceprovider",
