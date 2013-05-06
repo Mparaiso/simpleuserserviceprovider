@@ -8,5 +8,5 @@ $autoload->add("", __DIR__ . "/../src");
 //$app = new App(array(
 //    'debug' => getenv("RSVP_ENV") === 'development' ? TRUE : FALSE));
 
-$app = new App;
+$app = new App(array('debug'=>true));
 $app["http_cache"]->run();
