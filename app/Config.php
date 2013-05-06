@@ -30,7 +30,7 @@ class Config implements ServiceProviderInterface
 
     public function boot(Application $app)
     {
-        $app["dispatcher"]->addListener(DinnerEvents::BEFORE_CREATE,$app['before_dinner_create']);
+        $app["dispatcher"]->addListener(DinnerEvents::BEFORE_CREATE, $app['before_dinner_create']);
         $app['dispatcher']->addListener(RsvpEvents::BEFORE_CREATE, $app["before_rsvp_create"]);
         $app["dispatcher"]->addListener(RsvpEvents::BEFORE_DELETE, $app["before_rsvp_delete"]);
     }
@@ -50,8 +50,12 @@ class Config implements ServiceProviderInterface
         ));
         $app->register(new DoctrineServiceProvider, array(
             "db.options" => array(
-                "driver" => "pdo_sqlite",
-                "path"   => __DIR__ . "/db.sqlite"
+                "driver"   => getenv('RSVP_DRIVER'),
+                "path"     => getenv('RSVP_PATH'),
+                "dbname"   => getenv('RSVP_DBNAME'),
+                "host"     => getenv('RSVP_HOST'),
+                "username" => getenv('RSVP_USERNAME'),
+                "password" => getenv('RSVP_PASSWORD')
             )
         ));
         $app->register(new MonologServiceProvider, array(
@@ -85,10 +89,10 @@ class Config implements ServiceProviderInterface
 
 
         $app->register(new SimpleUserServiceProvider, array(
-            'mp.user.template.layout' => function ($app) {
+            'mp.user.template.layout'    => function ($app) {
                 return $app['mp.rdv.templates.layout'];
-            }, 'mp.user.user.class'   => 'Entity\User',
-            "mp.user.form.profile.model"=>'Entity\User'
+            }, 'mp.user.user.class'      => 'Entity\User',
+            "mp.user.form.profile.model" => 'Entity\User'
         ));
 
 
@@ -133,9 +137,9 @@ class Config implements ServiceProviderInterface
             );
         }
         $app['before_rsvp_create'] = $app->protect(function (GenericEvent $event) use ($app) {
-                $rsvp   = $event->getSubject();
+                $rsvp = $event->getSubject();
                 $dinner = $event->getArgument("dinner");
-                $user   = $app["security"]->getToken()->getUser();
+                $user = $app["security"]->getToken()->getUser();
                 if (!$dinner->isUserRegistered($user)) {
                     $rsvp->setAttendeeName($user->getUsername());
                     $rsvp->setUser($user);
@@ -145,10 +149,10 @@ class Config implements ServiceProviderInterface
             }
         );
         $app['before_rsvp_delete'] = $app->protect(function (GenericEvent $event) use ($app) {
-                $rsvp         = $event->getSubject();
-                $dinner       = $event->getArgument("dinner");
+                $rsvp = $event->getSubject();
+                $dinner = $event->getArgument("dinner");
                 $attendeeName = $event->getArgument("attendeeName");
-                $user         = $app["security"]->getToken()->getUser();
+                $user = $app["security"]->getToken()->getUser();
                 if ($user->getUsername() != $attendeeName) {
                     $app->abort(500, 'user cant unregister this attendee  ');
                 } elseif (!$dinner->isUserRegistered($user)) {
@@ -158,11 +162,11 @@ class Config implements ServiceProviderInterface
                 }
             }
         );
-        $app['before_dinner_create']=$app->protect(function ($event) use ($app) {
+        $app['before_dinner_create'] = $app->protect(function ($event) use ($app) {
             // FR : ajoute un utilisateur qui sera propriétaire du dinner , ainsi qu'un rsvp
             $app['logger']->info("BEFORE CREATING A DINNER");
             $dinner = $event->getSubject();
-            $user   = $app['security']->getToken()->getUser();
+            $user = $app['security']->getToken()->getUser();
             $dinner->setHost($user);
             $dinner->setHostedBy($user->getUsername());
             $rsvp = new Rsvp();
@@ -181,9 +185,9 @@ class Config implements ServiceProviderInterface
      */
     static function beforeRdvDinnerUpdate(Request $req, Application $app)
     {
-        $user     = $app["security"]->getToken()->getUser();
+        $user = $app["security"]->getToken()->getUser();
         $dinnerId = $req->attributes->get("id");
-        $dinner   = $app["mp.rdv.service.dinner"]->find($dinnerId);
+        $dinner = $app["mp.rdv.service.dinner"]->find($dinnerId);
         if ($dinner->getHost() != $user) {
             $app->abort(500, "You cant access that resource !");
         }

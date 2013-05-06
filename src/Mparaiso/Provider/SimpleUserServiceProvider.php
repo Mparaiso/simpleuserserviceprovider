@@ -68,7 +68,9 @@ class SimpleUserServiceProvider implements ServiceProviderInterface
         $app['mp.user.role_service.class'] = 'Mparaiso\User\Repository\RoleRepository';
         $app['mp.user.service.user.class'] = 'Mparaiso\User\Service\UserService';
         $app['mp.user.registration.type'] = 'Mparaiso\User\Form\RegistrationType';
-        $app['mp.user.registration.model'] = function($app){return $app['mp.user.user.class'];};
+        $app['mp.user.registration.model'] = function ($app) {
+            return $app['mp.user.user.class'];
+        };
 
         $app['mp.user.profile.type'] = 'Mparaiso\User\Form\ProfileType';
         $app['mp.user.profile.model'] = $app['mp.user.user.class'];
@@ -112,7 +114,8 @@ class SimpleUserServiceProvider implements ServiceProviderInterface
         );
 
         /** routes extension  */
-        $app['mp.route_loader']->add($app['mp.user.routes.type'], $app['mp.user.routes.path'], $app['mp.user.routes.prefix']);
+        $app['mp.route_loader']->add($app['mp.user.routes.type'],
+            $app['mp.user.routes.path'], $app['mp.user.routes.prefix']);
     }
 
 
