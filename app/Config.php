@@ -54,7 +54,7 @@ class Config implements ServiceProviderInterface
                 "path"     => getenv('RSVP_PATH'),
                 "dbname"   => getenv('RSVP_DBNAME'),
                 "host"     => getenv('RSVP_HOST'),
-                "username" => getenv('RSVP_USERNAME'),
+                "user" => getenv('RSVP_USERNAME'),
                 "password" => getenv('RSVP_PASSWORD')
             )
         ));
