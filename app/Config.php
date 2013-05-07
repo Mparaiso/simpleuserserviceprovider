@@ -54,7 +54,7 @@ class Config implements ServiceProviderInterface
                 "path"     => getenv('RSVP_PATH'),
                 "dbname"   => getenv('RSVP_DBNAME'),
                 "host"     => getenv('RSVP_HOST'),
-                "user" => getenv('RSVP_USERNAME'),
+                "user"     => getenv('RSVP_USERNAME'),
                 "password" => getenv('RSVP_PASSWORD')
             )
         ));
@@ -83,8 +83,8 @@ class Config implements ServiceProviderInterface
             )
         );
         $app->register(new RouteConfigServiceProvider, array(
-          //  'mp.route_loader.cache' => __DIR__ . "/../temp/routing",
-            # "mp.route_loader.debug" => false,
+            'mp.route_loader.cache' => __DIR__ . "/../temp/routing",
+            "mp.route_loader.debug" => TRUE,
         ));
 
 
