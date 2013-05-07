@@ -20,7 +20,8 @@
         "mparaiso/routeconfigserviceprovider":"*@dev",
         "mparaiso/consoleserviceprovider":"*@dev",
         "mparaiso/doctrineormserviceprovider":"*@dev",
-        "monolog/monolog":"*"
+        "monolog/monolog":"*",
+        "symfony/intl":"2.2.*"
     },
     "autoload": {
         "psr-0": {
