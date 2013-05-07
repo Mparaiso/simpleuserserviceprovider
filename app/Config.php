@@ -83,8 +83,8 @@ class Config implements ServiceProviderInterface
             )
         );
         $app->register(new RouteConfigServiceProvider, array(
-            'mp.route_loader.cache' => __DIR__ . "/../temp/routing",
-            "mp.route_loader.debug" => TRUE,
+            #'mp.route_loader.cache' => __DIR__ . "/../temp/routing",
+            #"mp.route_loader.debug" => TRUE,
         ));
 
 
