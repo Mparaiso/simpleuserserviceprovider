@@ -79,7 +79,7 @@ class Config implements ServiceProviderInterface
 
 
         $app->register(new TranslationServiceProvider, array(
-                "locale" => 'fr'
+               // "locale" => 'fr'
             )
         );
         $app->register(new RouteConfigServiceProvider, array(
