@@ -78,12 +78,10 @@ class Config implements ServiceProviderInterface
         ));
 
 
-        $app->register(new TranslationServiceProvider, array(
-               // "locale" => 'fr'
+        $app->register(new TranslationServiceProvider, array(// "locale" => 'fr',
             )
         );
-        $app->register(new RouteConfigServiceProvider, array(
-            #'mp.route_loader.cache' => __DIR__ . "/../temp/routing",
+        $app->register(new RouteConfigServiceProvider, array( #'mp.route_loader.cache' => __DIR__ . "/../temp/routing",
             #"mp.route_loader.debug" => TRUE,
         ));
 
