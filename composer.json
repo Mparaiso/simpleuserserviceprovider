@@ -21,7 +21,7 @@
         "mparaiso/consoleserviceprovider":"*@dev",
         "mparaiso/doctrineormserviceprovider":"*@dev",
         "monolog/monolog":"*",
-        "symfony/intl":"*"
+        "symfony/intl":"*@dev"
     },
     "autoload": {
         "psr-0": {
