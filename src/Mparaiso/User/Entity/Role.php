@@ -12,7 +12,8 @@ use Symfony\Component\Security\Core\Role\RoleInterface;
  * @ORM\Table(name="mp_user_roles")
  * @ORM\Entity
  */
-class Role implements RoleInterface, Serializable {
+class Role implements RoleInterface, Serializable
+    {
 
     /**
      * @var integer
@@ -21,21 +22,21 @@ class Role implements RoleInterface, Serializable {
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=50)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="role", type="string", length=50)
      */
-    private $role;
+    protected $role;
 
     /**
      * Get id
@@ -90,7 +91,7 @@ class Role implements RoleInterface, Serializable {
 
     public function serialize() {
         return serialize(array(
-            $this->id,
+            $this->id, $this->name, $this->role
         ));
     }
 
@@ -99,8 +100,12 @@ class Role implements RoleInterface, Serializable {
      */
     public function unserialize($serialized) {
         list (
-                $this->id,
+                $this->id, $this->name, $this->role
                 ) = unserialize($serialized);
     }
 
-}
+    function __toString() {
+        return $this->role;
+    }
+
+    }
