@@ -3,7 +3,6 @@
 namespace Mparaiso\Provider;
 
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
 use Doctrine\ODM\MongoDB\Mapping\Driver\YamlDriver as YamlODMDriver;
 use Mparaiso\User\Command\CreateRoleCommand;
@@ -93,13 +92,11 @@ class SimpleUserServiceProvider implements ServiceProviderInterface
             return uniqid();
         });
 
-        $app['mp.user.manager_type'] = "doctrine/orm";
-        # can be either doctrine/orm or doctrine/mongodb-odm
 
         $app['mp.user.resource.doctrine-orm.base'] = __DIR__ . "/../User/Resources/doctrine/";
         $app['mp.user.resource.doctrine-orm.concrete'] = __DIR__ . "/../User/Resources/doctrine-concrete";
-        $app['mp.user.resource.mongodb-odm.base'] = __DIR__ . '/../User/Resources/mongodb-odm/';
-        $app['mp.user.resource.mongodb-odm.concrete'] = __DIR__ . '/../User/Resources/mongodb-odm-concrete/';
+        $app['mp.user.resource.mongodb-odm.base'] = __DIR__ . '/../User/Resources/mongodb-odm';
+        $app['mp.user.resource.mongodb-odm.concrete'] = __DIR__ . '/../User/Resources/mongodb-odm-concrete';
     }
 
     function boot(Application $app)
@@ -110,17 +107,25 @@ class SimpleUserServiceProvider implements ServiceProviderInterface
                 return $loader;
             }
         );
-
-        if (isset($app['orm.em'])) {
-            /** install entities * */
+        /**
+         * Choose what kind of manager to user , ORM ( doctrine-orm ) or ODM ( mongodb-odm )
+         */
+        if (isset($app['orm.em.manager_type'])) {
             $app['orm.chain_driver'] = $app->share(
                 $app->extend("orm.chain_driver", function (MappingDriverChain $chain, $app) {
+<<<<<<< HEAD
                         $dir = __DIR__ . "/../User/Resources/doctrine/";
                         $chain->addDriver(new YamlDriver($dir), 'Mparaiso\User\Entity\Base');
                         return $chain;
                     }
                 )
             );
+=======
+                    $dir = $app['mp.user.resource.doctrine-orm.base'];
+                    $chain->addDriver(new YamlDriver($dir), 'Mparaiso\User\Entity\Base');
+                    return $chain;
+                }));
+>>>>>>> 8075d36ce6173a43448b13d7476371c8572a7489
         }
 
         /** routes extension  */

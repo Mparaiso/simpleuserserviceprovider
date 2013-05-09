@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints\Regex;
 /**
  * BaseUser
  */
-class User implements AdvancedUserInterface, Serializable
+abstract class User implements AdvancedUserInterface, Serializable
 {
 
     /**
