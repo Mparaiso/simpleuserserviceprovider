@@ -1,6 +1,6 @@
 <?php
 
-namespace Mparaiso\User\Entity;
+namespace Mparaiso\User\Entity\Base;
 
 use Doctrine\ORM\Mapping as ORM;
 use Serializable;
@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints\Regex;
 /**
  * BaseUser
  */
-class BaseUser implements AdvancedUserInterface, Serializable
+class User implements AdvancedUserInterface, Serializable
 {
 
     /**

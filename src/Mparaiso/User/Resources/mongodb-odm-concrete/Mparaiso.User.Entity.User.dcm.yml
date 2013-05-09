@@ -1,0 +1,11 @@
+# Doctrine Mparaiso\User\Entity\User.dcm.yml
+Mparaiso\User\Entity\User:
+  table: mp_user_users
+  repositoryClass: Mparaiso\User\Repository\UserRepository
+  fields:
+    id:
+      id: true
+
+  referenceMany:
+    roles:
+      targetDocument: Mparaiso\User\Entity\Role

@@ -1,7 +1,7 @@
 <?php
 
 namespace Mparaiso\User\Entity;
-
+use Mparaiso\User\Entity\Base\User as BaseUser;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**

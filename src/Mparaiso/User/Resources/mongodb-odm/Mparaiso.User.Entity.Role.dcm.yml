@@ -1,0 +1,14 @@
+# Mparaiso\User\Entity\Group.dcm.yml
+Mparaiso\User\Entity\Role:
+  collection: mp_user_roles
+  repositoryClass: Mparaiso\User\Repository\RoleRepository
+  id:
+    id:
+      type: true
+  fields:
+    name:
+      type: string
+      unique: true
+    role:
+      type: string
+      unique: true
