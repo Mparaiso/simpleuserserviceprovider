@@ -18,7 +18,6 @@ class SimpleUserServiceProvider implements ServiceProviderInterface
 
     function register(Application $app)
     {
-        $app['mp.user.controllers'] = $this;
         $app['mp.user.service.user'] = $app->share(function ($app) {
             return new $app['mp.user.service.user.class'](
                 $app['mp.user.om'], $app['mp.user.user.class'], $app['mp.user.role.class']
@@ -39,14 +38,7 @@ class SimpleUserServiceProvider implements ServiceProviderInterface
         });
         /** ObjectManager * */
         $app['mp.user.om'] = $app->share(function ($app) {
-            switch ($app['mp.user.manager_type']) {
-                case "doctrine/mongodb-odm":
-                    return $app['odm.dm'];
-                    break;
-                default:
-                    return $app['orm.em'];
-                    break;
-            }
+            return $app['orm.em'];
         });
         $app["mp.user.manager_registry"] = $app->share(function ($app) {
             return $app['orm.manager_registry'];
@@ -129,12 +121,6 @@ class SimpleUserServiceProvider implements ServiceProviderInterface
                     }
                 )
             );
-        } elseif (isset($app['odm.dm']) && isset($app['odm.chain_driver']) && $app['mp.user.manager_type'] === "doctrine/mongodb-odm") {
-            $app['odm.chain_driver'] = $app->share($app->extend('odm.chain_driver', function (MappingDriverChain $chain, $app) {
-                $dir = __DIR__ . "/../User/Resources/mongodb-odm/";
-                $chain->addDriver(new YamlODMDriver($dir), 'Mparaiso\User\Entity\Base');
-                return $chain;
-            }));
         }
 
         /** routes extension  */

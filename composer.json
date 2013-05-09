@@ -1,31 +1,23 @@
 {
-    "name": "mparaiso/simpleuserserviceprovider",
-    "type": "provider",
-    "description": "Simple User management for Silex intended to mimic FOSUserBundle features, work in progress , not production ready yet ! ",
-    "keywords": ["User management"],
-    "homepage": "https://github.com/Mparaiso/simpleuserserviceprovider",
-    "license": "GPL",
-    "authors": [
+    "name":"mparaiso/simpleuserserviceprovider",
+    "type":"provider",
+    "description":"Simple User management for Silex intended to mimic FOSUserBundle features, work in progress , not production ready yet ! ",
+    "keywords":["User management"],
+    "homepage":"https://github.com/Mparaiso/simpleuserserviceprovider",
+    "license":"GPL",
+    "authors":[
         {
-            "name": "MParaiso",
-            "email": "mparaiso@online.fr"
+            "name":"MParaiso",
+            "email":"mparaiso@online.fr"
         }
     ],
-    "require": {
-        "php": ">=5.3.2",
-        "friendsofsymfony/user-bundle": "1.*",
-        "silex/silex": "*@dev",
-        "symfony/symfony": "2.2.*",
-        "swiftmailer/swiftmailer": "*",
-        "twig/twig":"*",
-        "mparaiso/routeconfigserviceprovider":"*@dev",
-        "mparaiso/consoleserviceprovider":"*@dev",
-        "mparaiso/doctrineormserviceprovider":"*@dev",
-        "monolog/monolog":"*"
+    "require":{
+        "php":">=5.3.2",
+        "friendsofsymfony/user-bundle":"1.*"
     },
-    "autoload": {
-        "psr-0": {
-            "": "src"
+    "autoload":{
+        "psr-0":{
+            "":"src"
         }
     }
 }

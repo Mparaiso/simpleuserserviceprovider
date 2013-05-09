@@ -330,12 +330,10 @@ class User implements AdvancedUserInterface, Serializable
     {
         #@note valider une entity unqiue : username doit être unique //
         $metadata->addConstraint(new UniqueEntity(array(
-            'fields'  => array('username'),
-            "service" => "validator.unique_entity",
+            'fields' => array('username'),
         )));
         $metadata->addConstraint(new UniqueEntity(array(
-            "fields"  => array('email'),
-            "service" => "validator.unique_entity",
+            "fields" => array('email'),
         )));
         $metadata->addPropertyConstraint("username", new Length(array('min' => 4, 'max' => 50)));
         $metadata->addPropertyConstraint("email", new Length(array('min' => 4, 'max' => 100)));
