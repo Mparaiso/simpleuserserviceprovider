@@ -2,7 +2,6 @@
 Mparaiso\User\Entity\User:
   type: document
   table: mp_user_users
-  repositoryClass: Mparaiso\User\Repository\UserRepository
   fields:
     id:
       id: true

@@ -2,7 +2,6 @@
 Mparaiso\User\Entity\Role:
   type: document
   collection: mp_user_roles
-  repositoryClass: Mparaiso\User\Repository\RoleRepository
   fields:
     id:
       id: true
