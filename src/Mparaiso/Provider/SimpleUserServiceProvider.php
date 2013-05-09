@@ -113,21 +113,11 @@ class SimpleUserServiceProvider implements ServiceProviderInterface
         if (isset($app['orm.em.manager_type'])) {
             $app['orm.chain_driver'] = $app->share(
                 $app->extend("orm.chain_driver", function (MappingDriverChain $chain, $app) {
-<<<<<<< HEAD
-                        $dir = __DIR__ . "/../User/Resources/doctrine/";
-                        $chain->addDriver(new YamlDriver($dir), 'Mparaiso\User\Entity\Base');
-                        return $chain;
-                    }
-                )
-            );
-=======
                     $dir = $app['mp.user.resource.doctrine-orm.base'];
                     $chain->addDriver(new YamlDriver($dir), 'Mparaiso\User\Entity\Base');
                     return $chain;
                 }));
->>>>>>> 8075d36ce6173a43448b13d7476371c8572a7489
         }
-
         /** routes extension  */
         if (isset($app['mp.route_loader'])) {
             $app['mp.route_loader']->add($app['mp.user.routes.type'],
