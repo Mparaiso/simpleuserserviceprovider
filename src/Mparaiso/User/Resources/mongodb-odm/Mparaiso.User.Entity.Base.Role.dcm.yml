@@ -1,0 +1,9 @@
+Mparaiso\User\Entity\Base\Role:
+  type: mappedSuperclass
+  fields:
+    name:
+      type: string
+      unique: true
+    role:
+      type: string
+      unique: true

@@ -5,9 +5,3 @@ Mparaiso\User\Entity\Role:
   fields:
     id:
       id: true
-    name:
-      type: string
-      unique: true
-    role:
-      type: string
-      unique: true

@@ -2,20 +2,19 @@
 
 namespace Mparaiso\User\Entity\Base;
 
-use Doctrine\ORM\Mapping as ORM;
 use Serializable;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
  * BaseUser
  */
 abstract class User implements AdvancedUserInterface, Serializable
-    {
+{
 
     /**
      * @var string
@@ -56,18 +55,6 @@ abstract class User implements AdvancedUserInterface, Serializable
      * @var boolean
      */
     protected $enabled;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $roles;
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Set username
@@ -237,36 +224,6 @@ abstract class User implements AdvancedUserInterface, Serializable
         return $this->enabled;
     }
 
-    /**
-     * Add roles
-     *
-     * @param \Mparaiso\User\Entity\Role $roles
-     * @return BaseUser
-     */
-    public function addRole(\Mparaiso\User\Entity\Role $roles) {
-        $this->roles[] = $roles;
-
-        return $this;
-    }
-
-    /**
-     * Remove roles
-     *
-     * @param \Mparaiso\User\Entity\Role $roles
-     */
-    public function removeRole(\Mparaiso\User\Entity\Role $roles) {
-        $this->roles->removeElement($roles);
-    }
-
-    /**
-     * Get roles
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRoles() {
-        return $this->roles->toArray();
-    }
-
     public function serialize() {
         return serialize(array(
             $this->id,
@@ -323,4 +280,15 @@ abstract class User implements AdvancedUserInterface, Serializable
                 array("pattern" => '#\d+#', "message" => "the value must have at least 1 number")));
     }
 
+    public function __construct() {
+        
     }
+
+    abstract function addRole(Role $role);
+
+    abstract function removeRole(Role $role);
+
+    abstract function getRoles();
+
+    abstract function setRoles($roles);
+}
