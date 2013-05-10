@@ -4,7 +4,6 @@ namespace Mparaiso\Provider;
 
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
-use Doctrine\ODM\MongoDB\Mapping\Driver\YamlDriver as YamlODMDriver;
 use Mparaiso\User\Command\CreateRoleCommand;
 use Mparaiso\User\Controller\ProfileController;
 use Mparaiso\User\Controller\RegistrationController;
