@@ -63,7 +63,6 @@ class SimpleUserServiceProvider implements ServiceProviderInterface
 
         $app['mp.user.user.class'] = 'Mparaiso\User\Entity\User';
         $app['mp.user.role.class'] = 'Mparaiso\User\Entity\Role';
-        $app['mp.user.role_service.class'] = 'Mparaiso\User\Repository\RoleRepository';
         $app['mp.user.service.user.class'] = 'Mparaiso\User\Service\UserService';
         $app['mp.user.registration.type'] = 'Mparaiso\User\Form\RegistrationType';
         $app['mp.user.registration.model'] = function ($app) {

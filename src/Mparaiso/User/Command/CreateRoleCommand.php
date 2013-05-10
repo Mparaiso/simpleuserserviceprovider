@@ -19,7 +19,7 @@ class CreateRoleCommand extends Command {
 
     function execute(InputInterface $input, OutputInterface $output) {
         $app = $this->getHelper("app")->getApplication();
-        $em = $app['mp.user.em'];
+        $em = $app['mp.user.om'];
         $roleClass = $app['mp.user.role.class'];
         $role = new $roleClass();
         $role->setName($input->getArgument('name'));
