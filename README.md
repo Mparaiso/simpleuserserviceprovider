@@ -25,6 +25,9 @@ these envirronment variables need to be set on the server
 + RSVP_DBNAME database name
 + RSVP_ENV either development or production
 
+### CHANGE LOG
+0.0.12 block "content" changed to block "mp_user_content" in twig templates
+
 
 
 
