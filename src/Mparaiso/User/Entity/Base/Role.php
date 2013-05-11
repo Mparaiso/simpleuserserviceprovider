@@ -3,7 +3,9 @@
 namespace Mparaiso\User\Entity\Base;
 
 use Serializable;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\Role\RoleInterface;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
  * Role
@@ -75,7 +77,7 @@ abstract class Role implements RoleInterface, Serializable
 
     public function serialize() {
         return serialize(array(
-            $this->id, $this->name, $this->role
+          $this->id, $this->name, $this->role
         ));
     }
 
@@ -84,12 +86,13 @@ abstract class Role implements RoleInterface, Serializable
      */
     public function unserialize($serialized) {
         list (
-                $this->id, $this->name, $this->role
-                ) = unserialize($serialized);
+            $this->id, $this->name, $this->role
+            ) = unserialize($serialized);
     }
 
     function __toString() {
-        return $this->role;
+        return $this->name;
     }
+
 
 }

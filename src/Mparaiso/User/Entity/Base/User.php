@@ -263,10 +263,10 @@ abstract class User implements AdvancedUserInterface, Serializable
     public static function loadValidatorMetadata(ClassMetadata $metadata) {
         #@note valider une entity unqiue : username doit être unique //
         $metadata->addConstraint(new UniqueEntity(array(
-            'fields' => array('username'),
+            'fields' => 'username',
         )));
         $metadata->addConstraint(new UniqueEntity(array(
-            "fields" => array('email'),
+            "fields" => 'email',
         )));
         $metadata->addPropertyConstraint("username",
                 new Length(array('min' => 4, 'max' => 50)));
