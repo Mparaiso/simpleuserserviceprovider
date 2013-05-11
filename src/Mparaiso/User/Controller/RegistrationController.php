@@ -3,6 +3,7 @@
 namespace Mparaiso\User\Controller;
 
 use Silex\Application;
+use Mparaiso\User\Service\IUserService;
 use Mparaiso\User\Event\RegistrationEvents;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +22,7 @@ class RegistrationController
 {
     protected $userService;
 
-    function __construct($userService)
+    function __construct(IUserService $userService)
     {
         $this->userService = $userService;
     }

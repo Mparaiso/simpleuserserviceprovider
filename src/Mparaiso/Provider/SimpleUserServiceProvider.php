@@ -3,8 +3,6 @@
 namespace Mparaiso\Provider;
 
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\Driver\DriverChain;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
 use Mparaiso\User\Command\CreateRoleCommand;
 use Mparaiso\User\Controller\ProfileController;
@@ -18,15 +16,14 @@ class SimpleUserServiceProvider implements ServiceProviderInterface
 
     function register(Application $app)
     {
-        $app['mp.user.controllers'] = $this;
         $app['mp.user.service.user'] = $app->share(function ($app) {
             return new $app['mp.user.service.user.class'](
-                $app['mp.user.em'], $app['mp.user.user.class'], $app['mp.user.role.class']
+                $app['mp.user.om'], $app['mp.user.user.class'], $app['mp.user.role.class']
             );
         });
         /* RoleRepository */
         $app['mp.user.role_service'] = $app->share(function ($app) {
-            return $app['mp.user.em']->getRepository($app['mp.user.role.class']);
+            return $app['mp.user.om']->getRepository($app['mp.user.role.class']);
         });
         $app['mp.user.controller.security'] = $app->share(function () {
             return new SecurityController;
@@ -37,8 +34,8 @@ class SimpleUserServiceProvider implements ServiceProviderInterface
         $app['mp.user.controller.profile'] = $app->share(function ($app) {
             return new ProfileController($app['mp.user.service.user']);
         });
-        /** EntityManager * */
-        $app['mp.user.em'] = $app->share(function ($app) {
+        /** ObjectManager * */
+        $app['mp.user.om'] = $app->share(function ($app) {
             return $app['orm.em'];
         });
         $app["mp.user.manager_registry"] = $app->share(function ($app) {
@@ -65,7 +62,6 @@ class SimpleUserServiceProvider implements ServiceProviderInterface
 
         $app['mp.user.user.class'] = 'Mparaiso\User\Entity\User';
         $app['mp.user.role.class'] = 'Mparaiso\User\Entity\Role';
-        $app['mp.user.role_service.class'] = 'Mparaiso\User\Repository\RoleRepository';
         $app['mp.user.service.user.class'] = 'Mparaiso\User\Service\UserService';
         $app['mp.user.registration.type'] = 'Mparaiso\User\Form\RegistrationType';
         $app['mp.user.registration.model'] = function ($app) {
@@ -93,6 +89,12 @@ class SimpleUserServiceProvider implements ServiceProviderInterface
         $app['mp.user.make_salt'] = $app->protect(function () {
             return uniqid();
         });
+
+
+        $app['mp.user.resource.doctrine-orm.base'] = __DIR__ . "/../User/Resources/doctrine/";
+        $app['mp.user.resource.doctrine-orm.concrete'] = __DIR__ . "/../User/Resources/doctrine-concrete";
+        $app['mp.user.resource.mongodb-odm.base'] = __DIR__ . '/../User/Resources/mongodb-odm';
+        $app['mp.user.resource.mongodb-odm.concrete'] = __DIR__ . '/../User/Resources/mongodb-odm-concrete';
     }
 
     function boot(Application $app)
@@ -103,19 +105,22 @@ class SimpleUserServiceProvider implements ServiceProviderInterface
                 return $loader;
             }
         );
-        /** install entities * */
-        $app['orm.chain_driver'] = $app->share(
-            $app->extend("orm.chain_driver", function (MappingDriverChain $chain, $app) {
-                    $dir = __DIR__ . "/../User/Resources/doctrine/";
-                    $chain->addDriver(new YamlDriver($dir), "Mparaiso\User\Entity");
+        /**
+         * Choose what kind of manager to user , ORM ( doctrine-orm ) or ODM ( mongodb-odm )
+         */
+        if (isset($app['orm.em.manager_type'])) {
+            $app['orm.chain_driver'] = $app->share(
+                $app->extend("orm.chain_driver", function (MappingDriverChain $chain, $app) {
+                    $dir = $app['mp.user.resource.doctrine-orm.base'];
+                    $chain->addDriver(new YamlDriver($dir), 'Mparaiso\User\Entity\Base');
                     return $chain;
-                }
-            )
-        );
-
+                }));
+        }
         /** routes extension  */
-        $app['mp.route_loader']->add($app['mp.user.routes.type'],
-            $app['mp.user.routes.path'], $app['mp.user.routes.prefix']);
+        if (isset($app['mp.route_loader'])) {
+            $app['mp.route_loader']->add($app['mp.user.routes.type'],
+                $app['mp.user.routes.path'], $app['mp.user.routes.prefix']);
+        }
     }
 
 

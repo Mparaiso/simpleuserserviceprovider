@@ -1,6 +1,6 @@
 {% extends app['mp.user.template.layout'] %}
-{% block content %}
-    <h4>This is you !</h4>
+{% block mp_user_content %}
+    <h4>{{'This is you'|trans}} !</h4>
     <dl>
         <dt>Username</dt>
         <dd>{{ app.security.token.user.username }}</dd>
@@ -10,6 +10,6 @@
         <dd>{{ app.security.token.user.email }}</dd>
     </dl>
     <div>
-        <a href="{{ path("mp.user.route.profile.update") }}">Edit Profie</a>
+        <a href="{{ path("mp.user.route.profile.update") }}">{{'Edit Profile'|trans}}</a>
     </div>
 {% endblock %}

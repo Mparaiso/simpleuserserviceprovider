@@ -1,25 +1,25 @@
 <?php
 namespace Mparaiso\User\Service;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
-use Mparaiso\User\Entity\BaseUser;
+use Mparaiso\User\Entity\Base\User;
 
-class UserService
+class UserService implements IUserService
 {
 
     protected $roleClass;
     protected $userClass;
     protected $em;
 
-    function __construct(EntityManager $em, $userClass, $roleClass)
+    function __construct(ObjectManager $em, $userClass, $roleClass)
     {
         $this->em = $em;
         $this->userClass = $userClass;
         $this->roleClass = $roleClass;
     }
 
-    function register(BaseUser $user)
+    function register(User $user)
     {
         $role_user = $this->em->getRepository("$this->roleClass")->findOneBy(array('role' => 'ROLE_USER'));
         $user->addRole($role_user);
@@ -42,7 +42,7 @@ class UserService
         return $this->em->getRepository($this->userClass)->findOneBy($criteria);
     }
 
-    function update(BaseUser $user, $flush = TRUE)
+    function update(User $user, $flush = TRUE)
     {
         $this->em->persist($user);
         if ($flush) {

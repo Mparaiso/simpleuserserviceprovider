@@ -1,4 +1,4 @@
-Mparaiso\User\Entity\BaseUser:
+Mparaiso\User\Entity\Base\User:
   type: mappedSuperclass
   table: mp_user_users
 

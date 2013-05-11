@@ -3,6 +3,7 @@
 namespace Mparaiso\User\Controller;
 
 use Silex\Application;
+use Mparaiso\User\Service\IUserService;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Mparaiso\User\Event\ProfileEvents;
@@ -16,7 +17,7 @@ class ProfileController
 {
     protected $userService;
 
-    function __construct($userService)
+    function __construct(IUserService $userService)
     {
         $this->userService = $userService;
     }

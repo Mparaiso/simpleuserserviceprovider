@@ -2,17 +2,17 @@
 
 namespace Mparaiso\User\Service;
 
-use Doctrine\ORM\EntityManager;
-use Mparaiso\User\Entity\BaseUser;
+use Doctrine\Common\Persistence\ObjectManager;
+use Mparaiso\User\Entity\Base\User;
 
 class ProfileService
 {
-    function __construct(EntityManager $em)
+    function __construct(ObjectManager $em)
     {
         $this->em = $em;
     }
 
-    function udpate(BaseUser $user)
+    function udpate(User $user)
     {
 
     }

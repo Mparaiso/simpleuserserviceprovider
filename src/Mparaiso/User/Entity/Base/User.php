@@ -1,20 +1,19 @@
 <?php
 
-namespace Mparaiso\User\Entity;
+namespace Mparaiso\User\Entity\Base;
 
-use Doctrine\ORM\Mapping as ORM;
 use Serializable;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
  * BaseUser
  */
-class BaseUser implements AdvancedUserInterface, Serializable
+abstract class User implements AdvancedUserInterface, Serializable
 {
 
     /**
@@ -58,26 +57,12 @@ class BaseUser implements AdvancedUserInterface, Serializable
     protected $enabled;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $roles;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
      * Set username
      *
      * @param string $username
      * @return BaseUser
      */
-    public function setUsername($username)
-    {
+    public function setUsername($username) {
         $this->username = $username;
 
         return $this;
@@ -88,8 +73,7 @@ class BaseUser implements AdvancedUserInterface, Serializable
      *
      * @return string
      */
-    public function getUsername()
-    {
+    public function getUsername() {
         return $this->username;
     }
 
@@ -99,8 +83,7 @@ class BaseUser implements AdvancedUserInterface, Serializable
      * @param string $password
      * @return BaseUser
      */
-    public function setPassword($password)
-    {
+    public function setPassword($password) {
         $this->password = $password;
 
         return $this;
@@ -111,8 +94,7 @@ class BaseUser implements AdvancedUserInterface, Serializable
      *
      * @return string
      */
-    public function getPassword()
-    {
+    public function getPassword() {
         return $this->password;
     }
 
@@ -122,8 +104,7 @@ class BaseUser implements AdvancedUserInterface, Serializable
      * @param string $email
      * @return BaseUser
      */
-    public function setEmail($email)
-    {
+    public function setEmail($email) {
         $this->email = $email;
 
         return $this;
@@ -134,8 +115,7 @@ class BaseUser implements AdvancedUserInterface, Serializable
      *
      * @return string
      */
-    public function getEmail()
-    {
+    public function getEmail() {
         return $this->email;
     }
 
@@ -145,8 +125,7 @@ class BaseUser implements AdvancedUserInterface, Serializable
      * @param string $salt
      * @return BaseUser
      */
-    public function setSalt($salt)
-    {
+    public function setSalt($salt) {
         $this->salt = $salt;
 
         return $this;
@@ -157,8 +136,7 @@ class BaseUser implements AdvancedUserInterface, Serializable
      *
      * @return string
      */
-    public function getSalt()
-    {
+    public function getSalt() {
         return $this->salt;
     }
 
@@ -168,8 +146,7 @@ class BaseUser implements AdvancedUserInterface, Serializable
      * @param boolean $accountNonExpired
      * @return BaseUser
      */
-    public function setAccountNonExpired($accountNonExpired)
-    {
+    public function setAccountNonExpired($accountNonExpired) {
         $this->accountNonExpired = $accountNonExpired;
 
         return $this;
@@ -180,8 +157,7 @@ class BaseUser implements AdvancedUserInterface, Serializable
      *
      * @return boolean
      */
-    public function getAccountNonExpired()
-    {
+    public function getAccountNonExpired() {
         return $this->accountNonExpired;
     }
 
@@ -191,8 +167,7 @@ class BaseUser implements AdvancedUserInterface, Serializable
      * @param boolean $accountNonLocked
      * @return BaseUser
      */
-    public function setAccountNonLocked($accountNonLocked)
-    {
+    public function setAccountNonLocked($accountNonLocked) {
         $this->accountNonLocked = $accountNonLocked;
 
         return $this;
@@ -203,8 +178,7 @@ class BaseUser implements AdvancedUserInterface, Serializable
      *
      * @return boolean
      */
-    public function getAccountNonLocked()
-    {
+    public function getAccountNonLocked() {
         return $this->accountNonLocked;
     }
 
@@ -214,8 +188,7 @@ class BaseUser implements AdvancedUserInterface, Serializable
      * @param boolean $credentialsNonExpired
      * @return BaseUser
      */
-    public function setCredentialsNonExpired($credentialsNonExpired)
-    {
+    public function setCredentialsNonExpired($credentialsNonExpired) {
         $this->credentialsNonExpired = $credentialsNonExpired;
 
         return $this;
@@ -226,8 +199,7 @@ class BaseUser implements AdvancedUserInterface, Serializable
      *
      * @return boolean
      */
-    public function getCredentialsNonExpired()
-    {
+    public function getCredentialsNonExpired() {
         return $this->credentialsNonExpired;
     }
 
@@ -237,8 +209,7 @@ class BaseUser implements AdvancedUserInterface, Serializable
      * @param boolean $enabled
      * @return BaseUser
      */
-    public function setEnabled($enabled)
-    {
+    public function setEnabled($enabled) {
         $this->enabled = $enabled;
 
         return $this;
@@ -249,101 +220,75 @@ class BaseUser implements AdvancedUserInterface, Serializable
      *
      * @return boolean
      */
-    public function getEnabled()
-    {
+    public function getEnabled() {
         return $this->enabled;
     }
 
-    /**
-     * Add roles
-     *
-     * @param \Mparaiso\User\Entity\Role $roles
-     * @return BaseUser
-     */
-    public function addRole(\Mparaiso\User\Entity\Role $roles)
-    {
-        $this->roles[] = $roles;
-
-        return $this;
-    }
-
-    /**
-     * Remove roles
-     *
-     * @param \Mparaiso\User\Entity\Role $roles
-     */
-    public function removeRole(\Mparaiso\User\Entity\Role $roles)
-    {
-        $this->roles->removeElement($roles);
-    }
-
-    /**
-     * Get roles
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRoles()
-    {
-        return $this->roles;
-    }
-
-    public function serialize()
-    {
+    public function serialize() {
         return serialize(array(
             $this->id,
         ));
     }
 
-    public function unserialize($serialized)
-    {
+    public function unserialize($serialized) {
 
-        list($this->id,) = unserialize($serialized);
+        list($this->id, ) = unserialize($serialized);
     }
 
-    public function eraseCredentials()
-    {
-
+    public function eraseCredentials() {
+        
     }
 
-    public function isAccountNonExpired()
-    {
+    public function isAccountNonExpired() {
         return $this->accountNonExpired;
     }
 
-    public function isAccountNonLocked()
-    {
+    public function isAccountNonLocked() {
         return $this->accountNonLocked;
     }
 
-    public function isCredentialsNonExpired()
-    {
+    public function isCredentialsNonExpired() {
         return $this->credentialsNonExpired;
     }
 
-    public function isEnabled()
-    {
+    public function isEnabled() {
         return $this->enabled;
     }
 
-    /** contraintes de validation * */
-    public static function loadValidatorMetadata(ClassMetadata $metadata)
-    {
-        #@note valider une entity unqiue : username doit être unique //
-        $metadata->addConstraint(new UniqueEntity(array(
-            'fields'  => array('username'),
-            "service" => "validator.unique_entity",
-        )));
-        $metadata->addConstraint(new UniqueEntity(array(
-            "fields"  => array('email'),
-            "service" => "validator.unique_entity",
-        )));
-        $metadata->addPropertyConstraint("username", new Length(array('min' => 4, 'max' => 50)));
-        $metadata->addPropertyConstraint("email", new Length(array('min' => 4, 'max' => 100)));
-        $metadata->addPropertyConstraint("email", new Email());
-        $metadata->addPropertyConstraint("password", new Length(array('min' => 4, 'max' => 100)));
-        $metadata->addPropertyConstraint("password", new Regex(
-            array("pattern" => '#\d+#', "message" => "the value must have at least 1 number")));
-
+    function __toString() {
+        return $this->username;
     }
 
+    /** contraintes de validation * */
+    public static function loadValidatorMetadata(ClassMetadata $metadata) {
+        #@note valider une entity unqiue : username doit être unique //
+        $metadata->addConstraint(new UniqueEntity(array(
+            'fields' => 'username',
+        )));
+        $metadata->addConstraint(new UniqueEntity(array(
+            "fields" => 'email',
+        )));
+        $metadata->addPropertyConstraint("username",
+                new Length(array('min' => 4, 'max' => 50)));
+        $metadata->addPropertyConstraint("email",
+                new Length(array('min' => 4, 'max' => 100)));
+        $metadata->addPropertyConstraint("email", new Email());
+        $metadata->addPropertyConstraint("password",
+                new Length(array('min' => 4, 'max' => 100)));
+        $metadata->addPropertyConstraint("password",
+                new Regex(
+                array("pattern" => '#\d+#', "message" => "the value must have at least 1 number")));
+    }
+
+    public function __construct() {
+        
+    }
+
+    abstract function addRole(Role $role);
+
+    abstract function removeRole(Role $role);
+
+    abstract function getRoles();
+
+    abstract function setRoles($roles);
 }

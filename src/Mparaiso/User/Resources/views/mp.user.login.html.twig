@@ -1,5 +1,5 @@
 {% extends app['mp.user.template.layout'] %}
-{% block content %}
+{% block mp_user_content %}
 <h4>Please login</h4>
 <form action="{{ path('mp.user.route.login.check')}}" method='POST'>
     <div>  {{ error }}</div>

@@ -1,0 +1,21 @@
+Mparaiso\User\Entity\Base\User:
+  type: mappedSuperclass
+  fields:
+    username:
+      type: string
+      unique: true
+    password:
+      type: string
+    email:
+      type: string
+      unique: true
+    salt:
+      type: string
+    accountNonExpired:
+      type: boolean
+    accountNonLocked:
+      type: boolean
+    credentialsNonExpired:
+      type: boolean
+    enabled:
+      type: boolean
