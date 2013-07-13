@@ -27,24 +27,6 @@ use Symfony\Component\Locale\Locale;
  */
 class RdvServiceProvider implements ServiceProviderInterface {
 
-    public function boot(Application $app) {
-
-        /** twig extension  */
-        $app['twig.loader.filesystem'] = $app->extend("twig.loader.filesystem", function($loader, $app) {
-                    $loader->addPath($app["mp.rdv.templates.path"]); // FR: ajouter le répertoire des templates FOS à TWIG
-                    return $loader;
-                }
-                );
-        /** routes extension  */
-        $app['mp.route_loader']->add($app['mp.rdv.routes.type'], $app['mp.rdv.routes.path'], $app['mp.rdv.routes.prefix']);
-
-        /** orm extension */
-        $app["orm.chain_driver"] = $app->extend("orm.chain_driver", function($chain, $app) {
-            $chain->addDriver(new YamlDriver($app['mp.rdv.orm.resources.paths']), $app['mp.rdv.orm.namespace']);
-            return $chain;
-        }
-        );
-    }
 
     public function register(Application $app) {
         $app["mp.rdv.templates.path"] = __DIR__ . "/../Rdv/Resources/views";
@@ -97,6 +79,26 @@ class RdvServiceProvider implements ServiceProviderInterface {
             }));
             return $twig;
         })
+        );
+    }
+
+    
+    public function boot(Application $app) {
+
+        /** twig extension  */
+        $app['twig.loader.filesystem'] = $app->extend("twig.loader.filesystem", function($loader, $app) {
+                    $loader->addPath($app["mp.rdv.templates.path"]); // FR: ajouter le répertoire des templates FOS à TWIG
+                    return $loader;
+                }
+                );
+        /** routes extension  */
+        $app['mp.route_loader']->add($app['mp.rdv.routes.type'], $app['mp.rdv.routes.path'], $app['mp.rdv.routes.prefix']);
+
+        /** orm extension */
+        $app["orm.chain_driver"] = $app->extend("orm.chain_driver", function($chain, $app) {
+            $chain->addDriver(new YamlDriver($app['mp.rdv.orm.resources.paths']), $app['mp.rdv.orm.namespace']);
+            return $chain;
+        }
         );
     }
 

@@ -3,7 +3,7 @@
 namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Mparaiso\User\Entity\BaseUser;
+use Mparaiso\User\Entity\Base\User as BaseUser;
 use Mparaiso\Rdv\Entity\BaseRsvp;
 
 /**
