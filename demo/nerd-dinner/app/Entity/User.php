@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * User
  */
-class User extends \Mparaiso\User\Entity\BaseUser
+class User extends \Mparaiso\User\Entity\Base\User
 {
     /**
      * @var integer
@@ -121,7 +121,7 @@ class User extends \Mparaiso\User\Entity\BaseUser
      * @param \Mparaiso\User\Entity\Role $roles
      * @return User
      */
-    public function addRole(\Mparaiso\User\Entity\Role $roles)
+    public function addRole(\Mparaiso\User\Entity\Base\Role $roles)
     {
         $this->roles[] = $roles;
     
@@ -133,7 +133,7 @@ class User extends \Mparaiso\User\Entity\BaseUser
      *
      * @param \Mparaiso\User\Entity\Role $roles
      */
-    public function removeRole(\Mparaiso\User\Entity\Role $roles)
+    public function removeRole(\Mparaiso\User\Entity\Base\Role $roles)
     {
         $this->roles->removeElement($roles);
     }
@@ -146,5 +146,9 @@ class User extends \Mparaiso\User\Entity\BaseUser
     public function getRoles()
     {
         return $this->roles->toArray();
+    }
+
+    public function setRoles($roles){
+        $this->roles=$roles;
     }
 }
