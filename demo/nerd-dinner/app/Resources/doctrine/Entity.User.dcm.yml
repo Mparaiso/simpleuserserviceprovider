@@ -31,6 +31,3 @@ Entity\User:
   manyToMany:
     roles:
       targetEntity: Mparaiso\User\Entity\Role
-      
-
-   

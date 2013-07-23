@@ -38,26 +38,29 @@ class Config implements ServiceProviderInterface
     public function register(Application $app)
     {
         $app->register(new SerializerServiceProvider);
+
+        $app->register(new DoctrineServiceProvider, array(
+            "db.options" => array(
+                "driver" => getenv('RSVP_DRIVER'),
+                "path" => getenv('RSVP_PATH'),
+                "dbname" => getenv('RSVP_DBNAME'),
+                "host" => getenv('RSVP_HOST'),
+                "user" => getenv('RSVP_USERNAME'),
+                "password" => getenv('RSVP_PASSWORD')
+            )
+        ));
+
         $app->register(new DoctrineORMServiceProvider, array(
-            "orm.proxy_dir"      => __DIR__ . '/Proxy/',
+            "orm.proxy_dir" => __DIR__ . '/Proxy/',
             "orm.driver.configs" => array(
                 "default" => array(
-                    "type"      => "yaml",
-                    "paths"     => array(__DIR__ . "/Resources/doctrine/"),
+                    "type" => "yaml",
+                    "paths" => array(__DIR__ . "/Resources/doctrine/"),
                     "namespace" => "Entity"
                 )
             )
         ));
-        $app->register(new DoctrineServiceProvider, array(
-            "db.options" => array(
-                "driver"   => getenv('RSVP_DRIVER'),
-                "path"     => getenv('RSVP_PATH'),
-                "dbname"   => getenv('RSVP_DBNAME'),
-                "host"     => getenv('RSVP_HOST'),
-                "user"     => getenv('RSVP_USERNAME'),
-                "password" => getenv('RSVP_PASSWORD')
-            )
-        ));
+
         $app->register(new MonologServiceProvider, array(
             "monolog.logfile" => __DIR__ . "/../temp/" . date("Y-m-d") . ".txt",
         ));
@@ -69,7 +72,7 @@ class Config implements ServiceProviderInterface
 
         $app->register(new ServiceControllerServiceProvider);
         $app->register(new TwigServiceProvider, array(
-            "twig.path"    => array(__DIR__ . '/Resources/views/'),
+            "twig.path" => array(__DIR__ . '/Resources/views/'),
             'twig.options' => array(
                 'cache' => __DIR__ . '/../temp/Cache')));
 
@@ -78,7 +81,7 @@ class Config implements ServiceProviderInterface
         ));
 
 
-        $app->register(new TranslationServiceProvider, array(// "locale" => 'fr',
+        $app->register(new TranslationServiceProvider, array( // "locale" => 'fr',
             )
         );
         $app->register(new RouteConfigServiceProvider, array( #'mp.route_loader.cache' => __DIR__ . "/../temp/routing",
@@ -87,40 +90,38 @@ class Config implements ServiceProviderInterface
 
 
         $app->register(new SimpleUserServiceProvider, array(
-            'mp.user.template.layout'    => function ($app) {
-                return $app['mp.rdv.templates.layout'];
-            }, 'mp.user.user.class'      => 'Entity\User',
-            "mp.user.form.profile.model" => 'Entity\User'
+            'mp.user.template.layout' => 'user.layout.html.twig',
+            'mp.user.user.class' => '\Entity\User',
+            "mp.user.form.profile.model" => '\Entity\User'
         ));
 
 
         $app->register(new RdvServiceProvider, array(
             "mp.rdv.templates.layout" => "layout.html.twig",
-            'mp.rdv.entity.dinner'    => 'Entity\Dinner',
-            "mp.rdv.entity.rsvp"      => 'Entity\Rsvp',
-            "mp.rdv.form.dinner"      => 'Form\DinnerType',
-            'mp.rdv.routes.path'      => __DIR__ . "/Resources/routing/mp_rdv_routes.yml",
+            'mp.rdv.entity.dinner' => 'Entity\Dinner',
+            "mp.rdv.entity.rsvp" => 'Entity\Rsvp',
+            "mp.rdv.form.dinner" => 'Form\DinnerType',
+            'mp.rdv.routes.path' => __DIR__ . "/Resources/routing/mp_rdv_routes.yml",
         ));
         if (!isset($app['no_security']) || $app['no_security'] == FALSE) {
             $app->register(new SecurityServiceProvider, array(
-                    "security.firewalls"    => function ($app) {
+                    "security.firewalls" => function ($app) {
                         return array(
                             "secured" => array(
-                                "pattern"   => "^/",
+                                "pattern" => "^/",
                                 "anonymous" => TRUE,
-                                "form"      => array(
-                                    "login_path"                     => "/login",
-                                    "check_path"                     => "/login-check",
+                                "form" => array(
+                                    "login_path" => "/login",
+                                    "check_path" => "/login-check",
                                     "always_use_default_target_path" => FALSE,
-                                    // "default_target_path" => null,
                                 ),
-                                "logout"    => array(
-                                    "logout_path"        => "/logout",
-                                    "target"             => "/",
+                                "logout" => array(
+                                    "logout_path" => "/logout",
+                                    "target" => "/",
                                     "invalidate_session" => TRUE,
-                                    "delete_cookies"     => TRUE
+                                    "delete_cookies" => TRUE
                                 ),
-                                "users"     => $app['mp.user.user_provider']
+                                "users" => $app['mp.user.user_provider']
                             )
                         );
                     },

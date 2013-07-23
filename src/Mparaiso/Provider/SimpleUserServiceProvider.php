@@ -110,11 +110,11 @@ class SimpleUserServiceProvider implements ServiceProviderInterface
         /**
          * Choose what kind of manager to user , ORM ( doctrine-orm ) or ODM ( mongodb-odm )
          */
-        if (isset($app['orm.em.manager_type'])) {
+        if (isset($app['orm.em'])) {
             $app['orm.chain_driver'] = $app->share(
                 $app->extend("orm.chain_driver", function (MappingDriverChain $chain, $app) {
                     $dir = $app['mp.user.resource.doctrine-orm.base'];
-                    $chain->addDriver(new YamlDriver($dir), 'Mparaiso\User\Entity\Base');
+                    $chain->addDriver(new YamlDriver($dir), 'Mparaiso\User\Entity');
                     return $chain;
                 }));
         }

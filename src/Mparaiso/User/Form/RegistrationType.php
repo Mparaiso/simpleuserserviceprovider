@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 class RegistrationType extends AbstractType {
 
     function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder->add('username', null)
+        $builder->add('username')
                 ->add('email', 'email')
                 ->add('password', 'repeated', array(
                     "type" => "password",
