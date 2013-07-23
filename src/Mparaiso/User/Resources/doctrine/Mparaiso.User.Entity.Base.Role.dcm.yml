@@ -1,8 +1,6 @@
-# Mparaiso\User\Entity\Group.dcm.yml
-Mparaiso\User\Entity\Role:
+Mparaiso\User\Entity\Base\Role:
   type: entity
   table: mp_user_roles
-  repositoryClass: Mparaiso\User\Repository\RoleRepository
   id:
     id:
       type: integer

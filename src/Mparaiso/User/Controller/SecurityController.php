@@ -23,7 +23,7 @@ class SecurityController {
         
     }
 
-    function loginCheck(Application $app, Request $re) {
+    function loginCheck(Application $app, Request $req) {
         
     }
 

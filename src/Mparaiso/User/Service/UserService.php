@@ -21,8 +21,10 @@ class UserService implements IUserService
 
     function register(User $user)
     {
-        $role_user = $this->em->getRepository("$this->roleClass")->findOneBy(array('role' => 'ROLE_USER'));
-        $user->addRole($role_user);
+        if (count($user->getRoles()) <= 0) {
+            $role_user = $this->em->getRepository("$this->roleClass")->findOneBy(array('role' => 'ROLE_USER'));
+            $user->addRole($role_user);
+        }
         $user->setAccountNonExpired(TRUE);
         $user->setAccountNonLocked(TRUE);
         $user->setCredentialsNonExpired(TRUE);
