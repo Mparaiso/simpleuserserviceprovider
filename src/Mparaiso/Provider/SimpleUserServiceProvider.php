@@ -3,6 +3,7 @@
 namespace Mparaiso\Provider;
 
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
+use Mparaiso\User\Command\CreateUserCommand;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
 use Mparaiso\User\Command\CreateRoleCommand;
 use Mparaiso\User\Controller\ProfileController;
@@ -55,13 +56,14 @@ class SimpleUserServiceProvider implements ServiceProviderInterface
         };
         $app['mp.user.boot_commands'] = $app->protect(function () use ($app) {
             $app['mp.user.console']->add(new CreateRoleCommand);
+            $app['mp.user.console']->add(new CreateUserCommand);
         });
         $app['mp.user.user_provider.class'] = 'Symfony\Bridge\Doctrine\Security\User\EntityUserProvider';
         $app['mp.user.user_provider.property'] = 'username';
         $app['mp.user.user_provider.manager_name'] = NULL;
 
         $app['mp.user.user.class'] = 'Mparaiso\User\Entity\User';
-        $app['mp.user.role.class'] = 'Mparaiso\User\Entity\Role';
+        $app['mp.user.role.class'] = 'Mparaiso\User\Entity\Base\Role';
         $app['mp.user.service.user.class'] = 'Mparaiso\User\Service\UserService';
         $app['mp.user.registration.type'] = 'Mparaiso\User\Form\RegistrationType';
         $app['mp.user.registration.model'] = function ($app) {

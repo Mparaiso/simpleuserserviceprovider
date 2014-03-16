@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  * Role
  *
  */
-abstract class Role implements RoleInterface, Serializable
+class Role implements RoleInterface, Serializable
 {
 
     /**
@@ -27,11 +27,20 @@ abstract class Role implements RoleInterface, Serializable
     protected $role;
 
     /**
+     * @var integer
+     *
+     */
+    protected $id;
+
+    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
-    abstract function getId();
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set name
@@ -39,7 +48,8 @@ abstract class Role implements RoleInterface, Serializable
      * @param string $name
      * @return Role
      */
-    public function setName($name) {
+    public function setName($name)
+    {
         $this->name = $name;
 
         return $this;
@@ -48,9 +58,10 @@ abstract class Role implements RoleInterface, Serializable
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
@@ -60,7 +71,8 @@ abstract class Role implements RoleInterface, Serializable
      * @param string $role
      * @return Role
      */
-    public function setRole($role) {
+    public function setRole($role)
+    {
         $this->role = $role;
 
         return $this;
@@ -69,28 +81,32 @@ abstract class Role implements RoleInterface, Serializable
     /**
      * Get role
      *
-     * @return string 
+     * @return string
      */
-    public function getRole() {
+    public function getRole()
+    {
         return $this->role;
     }
 
-    public function serialize() {
+    public function serialize()
+    {
         return serialize(array(
-          $this->id, $this->name, $this->role
+            $this->id, $this->name, $this->role
         ));
     }
 
     /**
      * @see Serializable::unserialize()
      */
-    public function unserialize($serialized) {
+    public function unserialize($serialized)
+    {
         list (
             $this->id, $this->name, $this->role
             ) = unserialize($serialized);
     }
 
-    function __toString() {
+    function __toString()
+    {
         return $this->name;
     }
 
