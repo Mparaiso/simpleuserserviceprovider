@@ -5,9 +5,19 @@ author MParaiso , mparaiso@online.fr
 
 ## A user service provider for silex
 
-**SimpleUserServiceProvider** allows [Silex][1] developpers to register and authenticate website users against a database ,
-using a simple ServiceProvider. With **SimpleUserServiceProvider** , you no longer need to code basic registration/authentication
-functionality for your [silex][1] app.
+**SimpleUserServiceProvider** allows [Silex][1] developpers to register and authenticate users against a database ,
+using a simple ServiceProvider. With **SimpleUserServiceProvider** , you no longer need to code basic registration/authentication features yourself with [silex][1].
+
+### INSTALLATION
+
+simpleuserserviceprovider depends on FOS user bundle.
+
+witch composer , in composer.json :
+
+	require:{
+		"friendsofsymfony/user-bundle":"1.*",
+		"mparaiso/simpleuserserviceprovider":"0.*"
+	}
 
 
 [1]: https://github.com/fabpot/Silex
