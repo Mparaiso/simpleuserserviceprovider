@@ -17,6 +17,10 @@ class SimpleUserServiceProvider implements ServiceProviderInterface
 
     function register(Application $app)
     {
+
+        //is user registration allowed
+        $app['mp.user.allow_registration']=true;
+
         $app['mp.user.service.user'] = $app->share(function ($app) {
             return new $app['mp.user.service.user.class'](
                 $app['mp.user.om'], $app['mp.user.user.class'], $app['mp.user.role.class']

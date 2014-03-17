@@ -6,10 +6,9 @@
     <a class='' href="{{path('mp.user.route.profile.index')}}">{{ app.security.token.user.username }} </a> | 
     <a href="{{ path('mp.user.route.logout')}}">logout</a>
 {% else %}
-    <a href="{{path('mp.user.route.login')}}">login</a> |
+    <a href="{{path('mp.user.route.login')}}">login</a> 
+    {% if app['mp.user.allow_registration']==true %} |
     <a href="{{path('mp.user.route.register')}}">Register</a>
-
-
-
+    {% endif %}
 {% endif %}
 </span>
